@@ -23,31 +23,32 @@ class WeixinController extends AddonsController
         $paymentSet = $pay_config_db->where(array(
             'token' => $this->token
         ))->find();
-        $paymentSet['wxappid']=trim($paymentSet['wxappid']);
-        $paymentSet['wxpaysignkey']=trim($paymentSet['wxpaysignkey']);
-        $paymentSet['wxappsecret']=trim($paymentSet['wxappsecret']);
-        $paymentSet['wxmchid']=trim($paymentSet['wxmchid']);
+        $paymentSet['wxappid'] = trim($paymentSet['wxappid']);
+        $paymentSet['wxpaysignkey'] = trim($paymentSet['wxpaysignkey']);
+        $paymentSet['wxappsecret'] = trim($paymentSet['wxappsecret']);
+        $paymentSet['wxmchid'] = trim($paymentSet['wxmchid']);
         
-        if ($paymentSet['wx_cert_pem'] && $paymentSet['wx_key_pem']){
-            $ids[]=$paymentSet['wx_cert_pem'];
-            $ids[]=$paymentSet['wx_key_pem'];
-            $map['id']=array('in',$ids);
-            $fileData=M('file')->where($map)->select();
-            $downloadConfig=C(DOWNLOAD_UPLOAD);
-            foreach ($fileData as $f){
-                if ($paymentSet['wx_cert_pem']==$f['id']){
-                    
-                    $certpath=SITE_PATH.str_replace('/', '\\', substr($downloadConfig['rootPath'],1).$f['savepath'].$f['savename']);
-                }else{
-                    $keypath=SITE_PATH.str_replace('/', '\\', substr($downloadConfig['rootPath'],1).$f['savepath'].$f['savename']);
+        if ($paymentSet['wx_cert_pem'] && $paymentSet['wx_key_pem']) {
+            $ids[] = $paymentSet['wx_cert_pem'];
+            $ids[] = $paymentSet['wx_key_pem'];
+            $map['id'] = array(
+                'in',
+                $ids
+            );
+            $fileData = M('file')->where($map)->select();
+            $downloadConfig = C(DOWNLOAD_UPLOAD);
+            foreach ($fileData as $f) {
+                if ($paymentSet['wx_cert_pem'] == $f['id']) {
+                    $certpath = SITE_PATH . str_replace('/', '\\', substr($downloadConfig['rootPath'], 1) . $f['savepath'] . $f['savename']);
+                } else {
+                    $keypath = SITE_PATH . str_replace('/', '\\', substr($downloadConfig['rootPath'], 1) . $f['savepath'] . $f['savename']);
                 }
-                
             }
-            $paymentSet['cert_path']=$certpath;
-            $paymentSet['key_path']=$keypath;
+            $paymentSet['cert_path'] = $certpath;
+            $paymentSet['key_path'] = $keypath;
         }
-        $this->payConfig=$paymentSet;
-       
+        $this->payConfig = $paymentSet;
+        
         session('paymentinfo', $this->payConfig);
     }
     // 处理from URL字符串
@@ -66,11 +67,12 @@ class WeixinController extends AddonsController
     // }
     // return $str;
     // }
-    function getPaymentOpenid()
+    public function getPaymentOpenid()
     { // echo '444';
         $callback = GetCurUrl();
-        if ((defined('IN_WEIXIN') && IN_WEIXIN) || isset($_GET['is_stree']))
+        if ((defined('IN_WEIXIN') && IN_WEIXIN) || isset($_GET['is_stree'])) {
             return false;
+        }
         
         $callback = urldecode($callback);
         $isWeixinBrowser = isWeixinBrowser(); // echo '555';die();
@@ -98,16 +100,16 @@ class WeixinController extends AddonsController
             
             $url = 'https://open.weixin.qq.com/connect/oauth2/authorize?' . http_build_query($param) . '#wechat_redirect';
             redirect($url);
-        } else if ($_GET['state']) {
-                $param['secret'] = $this->payConfig['wxappsecret'];
-                $param['code'] = I('code');
-                $param['grant_type'] = 'authorization_code';
-                
-                $url = 'https://api.weixin.qq.com/sns/oauth2/access_token?' . http_build_query($param);
-                $content = file_get_contents($url);
-                $content = json_decode($content, true);
-                return $content['openid'];
-            }
+        } elseif ($_GET['state']) {
+            $param['secret'] = $this->payConfig['wxappsecret'];
+            $param['code'] = I('code');
+            $param['grant_type'] = 'authorization_code';
+            
+            $url = 'https://api.weixin.qq.com/sns/oauth2/access_token?' . http_build_query($param);
+            $content = file_get_contents($url);
+            $content = json_decode($content, true);
+            return $content['openid'];
+        }
     }
 
     public function pay()
@@ -133,12 +135,12 @@ class WeixinController extends AddonsController
         // dump($openId);
         // die();
         // // dump($openId);
-//         $openId='orgF0t-HyMrDJHFOl9GAkENyu6i0';
+        // $openId='orgF0t-HyMrDJHFOl9GAkENyu6i0';
         // dump('45456');
         $openId = $this->getPaymentOpenid();
-//         dump(session('paymentinfo'));
-//         dump($openId);
-//         dump('1232');die;
+        // dump(session('paymentinfo'));
+        // dump($openId);
+        // dump('1232');die;
         // 统一下单
         import('Weixinpay.WxPayData');
         $input = new \WxPayUnifiedOrder();
@@ -154,20 +156,20 @@ class WeixinController extends AddonsController
         $input->SetOpenid($openId);
         
         $order = \WxPayApi::unifiedOrder($input);
-        if ($order['return_code'] == 'FAIL'){
-        	$this->error('参数出现错误！');
-        	exit();
+        if ($order['return_code'] == 'FAIL') {
+            $this->error('参数出现错误！');
+            exit();
         }
-//         echo '<font color="#f00"><b>统一下单支付单信息</b></font><br/>';
-         //dump($order);
-//         die;
+        // echo '<font color="#f00"><b>统一下单支付单信息</b></font><br/>';
+        // dump($order);
+        // die;
         $jsApiParameters = $tools->GetJsApiParameters($order);
-       //  dump($jsApiParameters);
-        $from = $_GET ['from'];
-        $fromstr = str_replace ( '_', '/', $from );
-        $returnUrl = addons_url ( $fromstr );
-        if (empty($returnUrl)){
-        	$returnUrl = addons_url('Payment://Weixin/payOK');
+        // dump($jsApiParameters);
+        $from = $_GET['from'];
+        $fromstr = str_replace('_', '/', $from);
+        $returnUrl = addons_url($fromstr);
+        if (empty($returnUrl)) {
+            $returnUrl = addons_url('Payment://Weixin/payOK');
         }
         header('Location:' . SITE_URL . '/WxpayAPI/unifiedorder.php?jsApiParameters=' . $jsApiParameters . '&returnurl=' . $returnUrl . '&totalfee=' . $_GET['price'] . '&paymentId=' . $paymentId);
         
@@ -202,18 +204,20 @@ class WeixinController extends AddonsController
             if ($res) {
                 $info = $paymentDao->getInfo($paymentId, true);
                 $map['order_number'] = $info['single_orderid'];
-                $orderDao=D('Addons://Shop/Order');
-//                 $orderDao->where($map)->setField('pay_status', $isPay);
-                $orderid=$orderDao->where($map)->getField('id');
-			 	$orderInfo=$orderDao->getInfo($orderid);
-                $save ['pay_status'] = 1;
-				$res = $orderDao->update ( $orderid, $save );
-                $orderDao->setStatusCode ( $orderid, 1 );
-				if($orderInfo['auto_send']){
-					$orderDao -> autoSend($orderid);
-				}
+                $orderDao = D('Addons://Shop/Order');
+                // $orderDao->where($map)->setField('pay_status', $isPay);
+                $orderid = $orderDao->where($map)->getField('id');
+                $orderInfo = $orderDao->getInfo($orderid);
+                $save['pay_status'] = 1;
+                $res = $orderDao->update($orderid, $save);
+                $orderDao->setStatusCode($orderid, 1);
+                if ($orderInfo['auto_send']) {
+                    $orderDao->autoSend($orderid);
+                }
             }
-            $url = addons_url('Shop://Wap/orderDetail',array('id'=>$orderid));
+            $url = addons_url('Shop://Wap/orderDetail', array(
+                'id' => $orderid
+            ));
             $this->success('支付成功,即将跳转到订单详情', $url);
         }
     }
@@ -240,14 +244,14 @@ class WeixinController extends AddonsController
         exit();
     }
 
-    function api_notice_increment($url, $data)
+    public function api_notice_increment($url, $data)
     {
         $ch = curl_init();
         $header = "Accept-Charset: utf-8";
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
         curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (compatible; MSIE 5.01; Windows NT 5.0)');
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
@@ -269,9 +273,8 @@ class WeixinController extends AddonsController
                     'errorno' => 0
                 );
             } else {
-				$this->error ( error_msg ( $js ) );                
+                $this->error(error_msg($js));
             }
         }
     }
 }
-?>

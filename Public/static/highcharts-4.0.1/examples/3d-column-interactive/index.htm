@@ -1,11 +1,12 @@
 <!DOCTYPE HTML>
 <html>
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<title>Highcharts Example</title>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Highcharts Example</title>
 
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-		<script type="text/javascript">
+<script type="text/javascript"
+	src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript">
 $(function () {
     // Set up the chart
     var chart = new Highcharts.Chart({
@@ -57,18 +58,26 @@ $(function () {
     showValues();
 });
 		</script>
-	</head>
-	<body>
-<script src="../../js/highcharts.js"></script>
-<script src="../../js/highcharts-3d.js"></script>
-<script src="../../js/modules/exporting.js"></script>
+</head>
+<body>
+	<script src="../../js/highcharts.js"></script>
+	<script src="../../js/highcharts-3d.js"></script>
+	<script src="../../js/modules/exporting.js"></script>
 
-<div id="container"></div>
-<div id="sliders">
-	<table>
-		<tr><td>Alpha Angle</td><td><input id="R0" type="range" min="0" max="45" value="15"/> <span id="R0-value" class="value"></span></td></tr>
-	    <tr><td>Beta Angle</td><td><input id="R1" type="range" min="0" max="45" value="15"/> <span id="R1-value" class="value"></span></td></tr>
-	</table>
-</div>
-	</body>
+	<div id="container"></div>
+	<div id="sliders">
+		<table>
+			<tr>
+				<td>Alpha Angle</td>
+				<td><input id="R0" type="range" min="0" max="45" value="15" />
+					<span id="R0-value" class="value"></span></td>
+			</tr>
+			<tr>
+				<td>Beta Angle</td>
+				<td><input id="R1" type="range" min="0" max="45" value="15" />
+					<span id="R1-value" class="value"></span></td>
+			</tr>
+		</table>
+	</div>
+</body>
 </html>

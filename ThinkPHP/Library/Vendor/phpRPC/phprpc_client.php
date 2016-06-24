@@ -1,35 +1,36 @@
 <?php
 /**********************************************************\
-|                                                          |
-| The implementation of PHPRPC Protocol 3.0                |
-|                                                          |
-| phprpc_client.php                                        |
-|                                                          |
-| Release 3.0.1                                            |
-| Copyright by Team-PHPRPC                                 |
-|                                                          |
-| WebSite:  http://www.phprpc.org/                         |
-|           http://www.phprpc.net/                         |
-|           http://www.phprpc.com/                         |
-|           http://sourceforge.net/projects/php-rpc/       |
-|                                                          |
-| Authors:  Ma Bingyao <andot@ujn.edu.cn>                  |
-|                                                          |
-| This file may be distributed and/or modified under the   |
-| terms of the GNU General Public License (GPL) version    |
-| 2.0 as published by the Free Software Foundation and     |
-| appearing in the included file LICENSE.                  |
-|                                                          |
-\**********************************************************/
+ |                                                          |
+ | The implementation of PHPRPC Protocol 3.0                |
+ |                                                          |
+ | phprpc_client.php                                        |
+ |                                                          |
+ | Release 3.0.1                                            |
+ | Copyright by Team-PHPRPC                                 |
+ |                                                          |
+ | WebSite:  http://www.phprpc.org/                         |
+ |           http://www.phprpc.net/                         |
+ |           http://www.phprpc.com/                         |
+ |           http://sourceforge.net/projects/php-rpc/       |
+ |                                                          |
+ | Authors:  Ma Bingyao <andot@ujn.edu.cn>                  |
+ |                                                          |
+ | This file may be distributed and/or modified under the   |
+ | terms of the GNU General Public License (GPL) version    |
+ | 2.0 as published by the Free Software Foundation and     |
+ | appearing in the included file LICENSE.                  |
+ |                                                          |
+ \**********************************************************/
 
-/* PHPRPC Client for PHP.
+/*
+ * PHPRPC Client for PHP.
  *
  * Copyright: Ma Bingyao <andot@ujn.edu.cn>
  * Version: 3.0
  * LastModified: Apr 12, 2010
- * This library is free.  You can redistribute it and/or modify it under GPL.
+ * This library is free. You can redistribute it and/or modify it under GPL.
  *
-/*
+ * /*
  * Interfaces
  *
  * $rpc_client = new PHPRPC_Client();
@@ -47,13 +48,11 @@
  * echo $rpc_client->sub(3, 2);
  * echo "<br />";
  * // error handle
- * $result = $rpc_client->mul(1, 2);  // no mul function
+ * $result = $rpc_client->mul(1, 2); // no mul function
  * if (is_a($result, "PHPRPC_Error")) {
- *     echo $result->toString();
+ * echo $result->toString();
  * }
  */
-
-
 $_PHPRPC_COOKIES = array();
 $_PHPRPC_COOKIE = '';
 $_PHPRPC_SID = 0;
@@ -63,7 +62,9 @@ if (defined('KEEP_PHPRPC_COOKIE_IN_SESSION')) {
         $_PHPRPC_COOKIES = $_SESSION['phprpc_cookies'];
         $_PHPRPC_COOKIE = $_SESSION['phprpc_cookie'];
     }
-    function keep_phprpc_cookie_in_session() {
+
+    function keep_phprpc_cookie_in_session()
+    {
         global $_PHPRPC_COOKIES, $_PHPRPC_COOKIE;
         $_SESSION['phprpc_cookies'] = $_PHPRPC_COOKIES;
         $_SESSION['phprpc_cookie'] = $_PHPRPC_COOKIE;
@@ -71,114 +72,137 @@ if (defined('KEEP_PHPRPC_COOKIE_IN_SESSION')) {
     register_shutdown_function('keep_phprpc_cookie_in_session');
 }
 
-class PHPRPC_Error {
-    var $Number;
-    var $Message;
-    function PHPRPC_Error($errno, $errstr) {
+class PHPRPC_Error
+{
+
+    public $Number;
+
+    public $Message;
+
+    public function PHPRPC_Error($errno, $errstr)
+    {
         $this->Number = $errno;
         $this->Message = $errstr;
     }
-    function toString() {
+
+    public function toString()
+    {
         return $this->Number . ":" . $this->Message;
     }
-    function __toString() {
+
+    public function __toString()
+    {
         return $this->toString();
     }
-    function getNumber() {
+
+    public function getNumber()
+    {
         return $this->Number;
     }
-    function getMessage() {
+
+    public function getMessage()
+    {
         return $this->Message;
     }
 }
 
-class _PHPRPC_Client {
-    var $_server;
-    var $_timeout;
-    var $_output;
-    var $_warning;
-    var $_proxy;
-    var $_key;
-    var $_keylen;
-    var $_encryptMode;
-    var $_charset;
-    var $_socket;
-    var $_clientid;
-    var $_http_version;
-    var $_keep_alive;
+class _PHPRPC_Client
+{
+
+    public $_server;
+
+    public $_timeout;
+
+    public $_output;
+
+    public $_warning;
+
+    public $_proxy;
+
+    public $_key;
+
+    public $_keylen;
+
+    public $_encryptMode;
+
+    public $_charset;
+
+    public $_socket;
+
+    public $_clientid;
+
+    public $_http_version;
+
+    public $_keep_alive;
     // Public Methods
-    function _PHPRPC_Client($serverURL = '') {
+    public function _PHPRPC_Client($serverURL = '')
+    {
         global $_PHPRPC_SID;
-        require_once('compat.php');
-        //register_shutdown_function(array(&$this, "_disconnect"));
-        $this->_proxy = NULL;
+        require_once ('compat.php');
+        // register_shutdown_function(array(&$this, "_disconnect"));
+        $this->_proxy = null;
         $this->_timeout = 30;
         $this->_clientid = 'php' . rand(1 << 30, 1 << 31) . time() . $_PHPRPC_SID;
-        $_PHPRPC_SID++;
+        $_PHPRPC_SID ++;
         $this->_socket = false;
         if ($serverURL != '') {
             $this->useService($serverURL);
         }
     }
-    function useService($serverURL, $username = NULL, $password = NULL) {
+
+    public function useService($serverURL, $username = null, $password = null)
+    {
         $this->_disconnect();
         $this->_http_version = "1.1";
         $this->_keep_alive = true;
         $this->_server = array();
-        $this->_key = NULL;
+        $this->_key = null;
         $this->_keylen = 128;
         $this->_encryptMode = 0;
         $this->_charset = 'utf-8';
         $urlparts = parse_url($serverURL);
-        if (!isset($urlparts['host'])) {
+        if (! isset($urlparts['host'])) {
             if (isset($_SERVER["HTTP_HOST"])) {
                 $urlparts['host'] = $_SERVER["HTTP_HOST"];
-            }
-            else if (isset($_SERVER["SERVER_NAME"])) {
+            } elseif (isset($_SERVER["SERVER_NAME"])) {
                 $urlparts['host'] = $_SERVER["SERVER_NAME"];
-            }
-            else {
+            } else {
                 $urlparts['host'] = "localhost";
             }
-            if (!isset($_SERVER["HTTPS"]) ||
-                $_SERVER["HTTPS"] == "off"  ||
-                $_SERVER["HTTPS"] == "") {
+            if (! isset($_SERVER["HTTPS"]) || $_SERVER["HTTPS"] == "off" || $_SERVER["HTTPS"] == "") {
                 $urlparts['scheme'] = "http";
-            }
-            else {
+            } else {
                 $urlparts['scheme'] = "https";
             }
             $urlparts['port'] = $_SERVER["SERVER_PORT"];
         }
-
-        if (!isset($urlparts['port'])) {
+        
+        if (! isset($urlparts['port'])) {
             if ($urlparts['scheme'] == "https") {
                 $urlparts['port'] = 443;
-            }
-            else {
+            } else {
                 $urlparts['port'] = 80;
             }
         }
-
-        if (!isset($urlparts['path'])) {
+        
+        if (! isset($urlparts['path'])) {
             $urlparts['path'] = "/";
-        }
-        else if (($urlparts['path']{0} != '/') && ($_SERVER["PHP_SELF"]{0} == '/')) {
+        } elseif (($urlparts['path']{0} != '/') && ($_SERVER["PHP_SELF"]{0} == '/')) {
             $urlparts['path'] = substr($_SERVER["PHP_SELF"], 0, strrpos($_SERVER["PHP_SELF"], '/') + 1) . $urlparts['path'];
         }
-
+        
         if (isset($urlparts['query'])) {
             $urlparts['path'] .= '?' . $urlparts['query'];
         }
-
-        if (!isset($urlparts['user']) || !is_null($username)) {
+        
+        if (! isset($urlparts['user']) || ! is_null($username)) {
             $urlparts['user'] = $username;
         }
-
-        if (!isset($urlparts['pass']) || !is_null($password)) {
+        
+        if (! isset($urlparts['pass']) || ! is_null($password)) {
             $urlparts['pass'] = $password;
         }
-
+        
         $this->_server['scheme'] = $urlparts['scheme'];
         $this->_server['host'] = $urlparts['host'];
         $this->_server['port'] = $urlparts['port'];
@@ -186,11 +210,12 @@ class _PHPRPC_Client {
         $this->_server['user'] = $urlparts['user'];
         $this->_server['pass'] = $urlparts['pass'];
     }
-    function setProxy($host, $port = NULL, $username = NULL, $password = NULL) {
+
+    public function setProxy($host, $port = null, $username = null, $password = null)
+    {
         if (is_null($host)) {
-            $this->_proxy = NULL;
-        }
-        else {
+            $this->_proxy = null;
+        } else {
             if (is_null($port)) {
                 $urlparts = parse_url($host);
                 if (isset($urlparts['host'])) {
@@ -198,8 +223,7 @@ class _PHPRPC_Client {
                 }
                 if (isset($urlparts['port'])) {
                     $port = $urlparts['port'];
-                }
-                else {
+                } else {
                     $port = 80;
                 }
                 if (isset($urlparts['user']) && is_null($username)) {
@@ -216,44 +240,60 @@ class _PHPRPC_Client {
             $this->_proxy['pass'] = $password;
         }
     }
-    function setKeyLength($keylen) {
-        if (!is_null($this->_key)) {
+
+    public function setKeyLength($keylen)
+    {
+        if (! is_null($this->_key)) {
             return false;
-        }
-        else {
+        } else {
             $this->_keylen = $keylen;
             return true;
         }
     }
-    function getKeyLength() {
+
+    public function getKeyLength()
+    {
         return $this->_keylen;
     }
-    function setEncryptMode($encryptMode) {
+
+    public function setEncryptMode($encryptMode)
+    {
         if (($encryptMode >= 0) && ($encryptMode <= 3)) {
-            $this->_encryptMode = (int)($encryptMode);
+            $this->_encryptMode = (int) ($encryptMode);
             return true;
-        }
-        else {
+        } else {
             $this->_encryptMode = 0;
             return false;
         }
     }
-    function getEncryptMode() {
+
+    public function getEncryptMode()
+    {
         return $this->_encryptMode;
     }
-    function setCharset($charset) {
+
+    public function setCharset($charset)
+    {
         $this->_charset = $charset;
     }
-    function getCharset() {
+
+    public function getCharset()
+    {
         return $this->_charset;
     }
-    function setTimeout($timeout) {
+
+    public function setTimeout($timeout)
+    {
         $this->_timeout = $timeout;
     }
-    function getTimeout() {
+
+    public function getTimeout()
+    {
         return $this->_timeout;
     }
-    function invoke($funcname, &$args, $byRef = false) {
+
+    public function invoke($funcname, &$args, $byRef = false)
+    {
         $result = $this->_key_exchange();
         if (is_a($result, 'PHPRPC_Error')) {
             return $result;
@@ -263,7 +303,7 @@ class _PHPRPC_Client {
             $request .= "&phprpc_args=" . base64_encode($this->_encrypt(serialize_fix($args), 1));
         }
         $request .= "&phprpc_encrypt={$this->_encryptMode}";
-        if (!$byRef) {
+        if (! $byRef) {
             $request .= "&phprpc_ref=false";
         }
         $request = str_replace('+', '%2B', $request);
@@ -272,7 +312,7 @@ class _PHPRPC_Client {
             return $result;
         }
         $phprpc_errno = 0;
-        $phprpc_errstr = NULL;
+        $phprpc_errstr = null;
         if (isset($result['phprpc_errno'])) {
             $phprpc_errno = intval($result['phprpc_errno']);
         }
@@ -285,39 +325,39 @@ class _PHPRPC_Client {
             if ($this->_server['version'] >= 3) {
                 $this->_output = $this->_decrypt($this->_output, 3);
             }
-        }
-        else {
+        } else {
             $this->_output = '';
         }
         if (array_key_exists('phprpc_result', $result)) {
             if (array_key_exists('phprpc_args', $result)) {
                 $arguments = unserialize($this->_decrypt(base64_decode($result['phprpc_args']), 1));
-                for ($i = 0; $i < count($arguments); $i++) {
+                for ($i = 0; $i < count($arguments); $i ++) {
                     $args[$i] = $arguments[$i];
                 }
             }
             $result = unserialize($this->_decrypt(base64_decode($result['phprpc_result']), 2));
-        }
-        else {
+        } else {
             $result = $this->_warning;
         }
         return $result;
     }
 
-    function getOutput() {
+    public function getOutput()
+    {
         return $this->_output;
     }
 
-    function getWarning() {
+    public function getWarning()
+    {
         return $this->_warning;
     }
 
-    function _connect() {
+    public function _connect()
+    {
         if (is_null($this->_proxy)) {
             $host = (($this->_server['scheme'] == "https") ? "ssl://" : "") . $this->_server['host'];
             $this->_socket = @pfsockopen($host, $this->_server['port'], $errno, $errstr, $this->_timeout);
-        }
-        else {
+        } else {
             $host = (($this->_server['scheme'] == "https") ? "ssl://" : "") . $this->_proxy['host'];
             $this->_socket = @pfsockopen($host, $this->_proxy['port'], $errno, $errstr, $this->_timeout);
         }
@@ -329,23 +369,27 @@ class _PHPRPC_Client {
         return true;
     }
 
-    function _disconnect() {
+    public function _disconnect()
+    {
         if ($this->_socket !== false) {
             fclose($this->_socket);
             $this->_socket = false;
         }
     }
 
-    function _socket_read($size) {
+    public function _socket_read($size)
+    {
         $content = "";
-        while (!feof($this->_socket) && ($size > 0)) {
+        while (! feof($this->_socket) && ($size > 0)) {
             $str = fread($this->_socket, $size);
             $content .= $str;
             $size -= strlen($str);
         }
         return $content;
     }
-    function _post($request_body) {
+
+    public function _post($request_body)
+    {
         global $_PHPRPC_COOKIE;
         $request_body = 'phprpc_id=' . $this->_clientid . '&' . $request_body;
         if ($this->_socket === false) {
@@ -356,18 +400,16 @@ class _PHPRPC_Client {
         }
         if (is_null($this->_proxy)) {
             $url = $this->_server['path'];
-            $connection = "Connection: " . ($this->_keep_alive ? 'Keep-Alive' : 'Close') . "\r\n" .
-                          "Cache-Control: no-cache\r\n";
-        }
-        else {
+            $connection = "Connection: " . ($this->_keep_alive ? 'Keep-Alive' : 'Close') . "\r\n" . "Cache-Control: no-cache\r\n";
+        } else {
             $url = "{$this->_server['scheme']}://{$this->_server['host']}:{$this->_server['port']}{$this->_server['path']}";
             $connection = "Proxy-Connection: " . ($this->_keep_alive ? 'keep-alive' : 'close') . "\r\n";
-            if (!is_null($this->_proxy['user'])) {
+            if (! is_null($this->_proxy['user'])) {
                 $connection .= "Proxy-Authorization: Basic " . base64_encode($this->_proxy['user'] . ":" . $this->_proxy['pass']) . "\r\n";
             }
         }
         $auth = '';
-        if (!is_null($this->_server['user'])) {
+        if (! is_null($this->_server['user'])) {
             $auth = "Authorization: Basic " . base64_encode($this->_server['user'] . ":" . $this->_server['pass']) . "\r\n";
         }
         $cookie = '';
@@ -375,41 +417,30 @@ class _PHPRPC_Client {
             $cookie = "Cookie: " . $_PHPRPC_COOKIE . "\r\n";
         }
         $content_len = strlen($request_body);
-        $request =
-            "POST $url HTTP/{$this->_http_version}\r\n" .
-            "Host: {$this->_server['host']}:{$this->_server['port']}\r\n" .
-            "User-Agent: PHPRPC Client 3.0 for PHP\r\n" .
-            $auth .
-            $connection .
-            $cookie .
-            "Accept: */*\r\n" .
-            "Accept-Encoding: gzip,deflate\r\n" .
-            "Content-Type: application/x-www-form-urlencoded; charset={$this->_charset}\r\n" .
-            "Content-Length: {$content_len}\r\n" .
-            "\r\n" .
-            $request_body;
+        $request = "POST $url HTTP/{$this->_http_version}\r\n" . "Host: {$this->_server['host']}:{$this->_server['port']}\r\n" . "User-Agent: PHPRPC Client 3.0 for PHP\r\n" . $auth . $connection . $cookie . "Accept: */*\r\n" . "Accept-Encoding: gzip,deflate\r\n" . "Content-Type: application/x-www-form-urlencoded; charset={$this->_charset}\r\n" . "Content-Length: {$content_len}\r\n" . "\r\n" . $request_body;
         fputs($this->_socket, $request, strlen($request));
-        while (!feof($this->_socket)) {
+        while (! feof($this->_socket)) {
             $line = fgets($this->_socket);
             if (preg_match('/HTTP\/(\d\.\d)\s+(\d+)([^(\r|\n)]*)(\r\n|$)/i', $line, $match)) {
                 $this->_http_version = $match[1];
-                $status = (int)$match[2];
+                $status = (int) $match[2];
                 $status_message = trim($match[3]);
                 if ($status != 100 && $status != 200) {
                     $this->_disconnect();
                     return new PHPRPC_Error($status, $status_message);
                 }
-            }
-            else {
+            } else {
                 $this->_disconnect();
                 return new PHPRPC_Error(E_ERROR, "Illegal HTTP server.");
             }
             $header = array();
-            while (!feof($this->_socket) && (($line = fgets($this->_socket)) != "\r\n")) {
+            while (! feof($this->_socket) && (($line = fgets($this->_socket)) != "\r\n")) {
                 $line = explode(':', $line, 2);
-                $header[strtolower($line[0])][] =trim($line[1]);
+                $header[strtolower($line[0])][] = trim($line[1]);
             }
-            if ($status == 100) continue;
+            if ($status == 100) {
+                continue;
+            }
             $response_header = $this->_parseHeader($header);
             if (is_a($response_header, 'PHPRPC_Error')) {
                 $this->_disconnect();
@@ -424,22 +455,20 @@ class _PHPRPC_Client {
                 $this->_disconnect();
                 return array();
             }
-            $chunk_size = (int)hexdec($s);
+            $chunk_size = (int) hexdec($s);
             while ($chunk_size > 0) {
                 $response_body .= $this->_socket_read($chunk_size);
                 if (fgets($this->_socket) != "\r\n") {
                     $this->_disconnect();
                     return new PHPRPC_Error(1, "Response is incorrect.");
                 }
-                $chunk_size = (int)hexdec(fgets($this->_socket));
+                $chunk_size = (int) hexdec(fgets($this->_socket));
             }
             fgets($this->_socket);
-        }
-        elseif (isset($response_header['content_length']) && !is_null($response_header['content_length'])) {
+        } elseif (isset($response_header['content_length']) && ! is_null($response_header['content_length'])) {
             $response_body = $this->_socket_read($response_header['content_length']);
-        }
-        else {
-            while (!feof($this->_socket)) {
+        } else {
+            while (! feof($this->_socket)) {
                 $response_body .= fread($this->_socket, 4096);
             }
             $this->_keep_alive = false;
@@ -448,19 +477,22 @@ class _PHPRPC_Client {
         if (isset($response_header['content_encoding']) && (strtolower($response_header['content_encoding']) == 'gzip')) {
             $response_body = gzdecode($response_body);
         }
-        if (!$this->_keep_alive) $this->_disconnect();
+        if (! $this->_keep_alive) {
+            $this->_disconnect();
+        }
         if ($this->_keep_alive && strtolower($response_header['connection']) == 'close') {
             $this->_keep_alive = false;
             $this->_disconnect();
         }
         return $this->_parseBody($response_body);
     }
-    function _parseHeader($header) {
+
+    public function _parseHeader($header)
+    {
         global $_PHPRPC_COOKIE, $_PHPRPC_COOKIES;
         if (preg_match('/PHPRPC Server\/([^,]*)(,|$)/i', implode(',', $header['x-powered-by']), $match)) {
-            $this->_server['version'] = (float)$match[1];
-        }
-        else {
+            $this->_server['version'] = (float) $match[1];
+        } else {
             return new PHPRPC_Error(E_ERROR, "Illegal PHPRPC server.");
         }
         if (preg_match('/text\/plain\; charset\=([^,;]*)([,;]|$)/i', $header['content-type'][0], $match)) {
@@ -469,8 +501,13 @@ class _PHPRPC_Client {
         if (isset($header['set-cookie'])) {
             foreach ($header['set-cookie'] as $cookie) {
                 foreach (preg_split('/[;,]\s?/', $cookie) as $c) {
-                    list($name, $value) = explode('=', $c, 2);
-                    if (!in_array($name, array('domain', 'expires', 'path', 'secure'))) {
+                    list ($name, $value) = explode('=', $c, 2);
+                    if (! in_array($name, array(
+                        'domain',
+                        'expires',
+                        'path',
+                        'secure'
+                    ))) {
                         $_PHPRPC_COOKIES[$name] = $value;
                     }
                 }
@@ -482,24 +519,27 @@ class _PHPRPC_Client {
             $_PHPRPC_COOKIE = join('; ', $cookies);
         }
         if (isset($header['content-length'])) {
-            $content_length = (int)$header['content-length'][0];
-        }
-        else {
-            $content_length = NULL;
+            $content_length = (int) $header['content-length'][0];
+        } else {
+            $content_length = null;
         }
         $transfer_encoding = isset($header['transfer-encoding']) ? $header['transfer-encoding'][0] : '';
         $content_encoding = isset($header['content-encoding']) ? $header['content-encoding'][0] : '';
         $connection = isset($header['connection']) ? $header['connection'][0] : 'close';
-        return array('transfer_encoding' => $transfer_encoding,
-                     'content_encoding' => $content_encoding,
-                     'content_length' => $content_length,
-                     'connection' => $connection);
+        return array(
+            'transfer_encoding' => $transfer_encoding,
+            'content_encoding' => $content_encoding,
+            'content_length' => $content_length,
+            'connection' => $connection
+        );
     }
-    function _parseBody($body) {
+
+    public function _parseBody($body)
+    {
         $body = explode(";\r\n", $body);
         $result = array();
         $n = count($body);
-        for ($i = 0; $i < $n; $i++) {
+        for ($i = 0; $i < $n; $i ++) {
             $p = strpos($body[$i], '=');
             if ($p !== false) {
                 $l = substr($body[$i], 0, $p);
@@ -509,29 +549,31 @@ class _PHPRPC_Client {
         }
         return $result;
     }
-    function _key_exchange() {
-        if (!is_null($this->_key) || ($this->_encryptMode == 0)) return true;
+
+    public function _key_exchange()
+    {
+        if (! is_null($this->_key) || ($this->_encryptMode == 0)) {
+            return true;
+        }
         $request = "phprpc_encrypt=true&phprpc_keylen={$this->_keylen}";
         $result = $this->_post($request);
         if (is_a($result, 'PHPRPC_Error')) {
             return $result;
         }
         if (array_key_exists('phprpc_keylen', $result)) {
-            $this->_keylen = (int)$result['phprpc_keylen'];
-        }
-        else {
+            $this->_keylen = (int) $result['phprpc_keylen'];
+        } else {
             $this->_keylen = 128;
         }
         if (array_key_exists('phprpc_encrypt', $result)) {
             $encrypt = unserialize(base64_decode($result['phprpc_encrypt']));
-            require_once('bigint.php');
-            require_once('xxtea.php');
+            require_once ('bigint.php');
+            require_once ('xxtea.php');
             $x = bigint_random($this->_keylen - 1, true);
             $key = bigint_powmod(bigint_dec2num($encrypt['y']), $x, bigint_dec2num($encrypt['p']));
             if ($this->_keylen == 128) {
                 $key = bigint_num2str($key);
-            }
-            else {
+            } else {
                 $key = pack('H*', md5(bigint_num2dec($key)));
             }
             $this->_key = str_pad($key, 16, "\0", STR_PAD_LEFT);
@@ -541,21 +583,24 @@ class _PHPRPC_Client {
             if (is_a($result, 'PHPRPC_Error')) {
                 return $result;
             }
-        }
-        else {
-            $this->_key = NULL;
+        } else {
+            $this->_key = null;
             $this->_encryptMode = 0;
         }
         return true;
     }
-    function _encrypt($str, $level) {
-        if (!is_null($this->_key) && ($this->_encryptMode >= $level)) {
+
+    public function _encrypt($str, $level)
+    {
+        if (! is_null($this->_key) && ($this->_encryptMode >= $level)) {
             $str = xxtea_encrypt($str, $this->_key);
         }
         return $str;
     }
-    function _decrypt($str, $level) {
-        if (!is_null($this->_key) && ($this->_encryptMode >= $level)) {
+
+    public function _decrypt($str, $level)
+    {
+        if (! is_null($this->_key) && ($this->_encryptMode >= $level)) {
             $str = xxtea_decrypt($str, $this->_key);
         }
         return $str;
@@ -572,12 +617,14 @@ if (function_exists("overload") && version_compare(phpversion(), "5", "<")) {
     }
     overload("phprpc_client");
     ');
-}
-else {
-    class PHPRPC_Client extends _PHPRPC_Client {
-        function __call($function, $arguments) {
+} else {
+
+    class PHPRPC_Client extends _PHPRPC_Client
+    {
+
+        public function __call($function, $arguments)
+        {
             return $this->invoke($function, $arguments);
         }
     }
 }
-?>

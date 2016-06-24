@@ -1,5 +1,4 @@
 <?php
-return array (
-		'location' => 'CustomReply' 
+return array(
+    'location' => 'CustomReply'
 );
-					

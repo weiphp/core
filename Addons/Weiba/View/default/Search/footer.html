@@ -1,8 +1,11 @@
-	<iframe src="{:addons_url('Weiba://Wap/ajax_iframe')}" id="ajax_iframe"></iframe>
 
-    </div><!--content-->
-</div><!--main-->
-        <script>
+<iframe src="{:addons_url('Weiba://Wap/ajax_iframe')}" id="ajax_iframe"></iframe>
+
+</div>
+<!--content-->
+</div>
+<!--main-->
+<script>
             (function(){
                 TS.cache.profile = {
                     uid:'{$profile["uid"]}',
@@ -19,7 +22,7 @@
         </script>
 
 </div>
-	<!--
+<!--
     <div class="postentry">
         <php>if(MODULE_NAME == 'Index' && in_array(ACTION_NAME,array('index','rec','fri_weibo','doSearch'))){</php>
             <a href="#new-weibo" id="postentry">&nbsp;</a>
@@ -34,31 +37,41 @@
         <php>}</php>
     </div>
     -->
-    <div id="pure-shadow"></div>
-    <div id="footer"></div>
-    <div id="custom"></div>
-    <php>if(ACTION_NAME == 'postDetail'){</php>
-    	<!-- 详情底部兰 -->
-        <div class="weiba_detail_bar">
-            <a href="javascript:;" onclick="showreplyDialog();"><i class="comment"></i><span>评论</span></a>
-            <a href="javascript:;" onclick="doPostDigg()">
-            	<div id="post-zan" class="<eq name="is_digg" value="1">iszan</eq>"><i class="zan"></i><em><gt name="post_detail[praise]" value="0">{$post_detail.praise}</gt></em></div><span class="mcount">点赞</span>
-            </a>
-            <if condition="$isWeixin">
-            <a onclick="ui.showShareTips();" href="javascript:;"><i class="share"></i><span>分享</span></a>
-            </if>
-        </div>
-        <div class="reply_dialog">
-            <div class="dialog">
-                <div class="textarea"><textarea autofocus name="weiba-reply-textarea" id="weiba-reply-textarea" placeholder="内容,2-70个字"></textarea></div>
-                <div class="bar">
-                    <a id="replybtn" class="btn" href="javascript:;" onclick="submitReply();">发送</a>
-                    <a class="btn btn_border" href="javascript:;" onclick="hidereplyDialog();">取消</a>
-                    
-                </div>
-            </div>
-        </div> 
-        <script type="text/javascript">
+<div id="pure-shadow"></div>
+<div id="footer"></div>
+<div id="custom"></div>
+<php>if(ACTION_NAME == 'postDetail'){</php>
+<!-- 详情底部兰 -->
+<div class="weiba_detail_bar">
+	<a href="javascript:;" onclick="showreplyDialog();"><i
+		class="comment"></i><span>评论</span></a> <a href="javascript:;"
+		onclick="doPostDigg()">
+		<div id="post-zan" class="<eq name=" is_digg" value="1">
+			iszan
+			</eq>
+			"><i class="zan"></i><em><gt name="post_detail[praise]"
+					value="0">{$post_detail.praise}</gt></em>
+		</div>
+		<span class="mcount">点赞</span>
+	</a>
+	<if condition="$isWeixin"> <a onclick="ui.showShareTips();"
+		href="javascript:;"><i class="share"></i><span>分享</span></a> </if>
+</div>
+<div class="reply_dialog">
+	<div class="dialog">
+		<div class="textarea">
+			<textarea autofocus name="weiba-reply-textarea"
+				id="weiba-reply-textarea" placeholder="内容,2-70个字"></textarea>
+		</div>
+		<div class="bar">
+			<a id="replybtn" class="btn" href="javascript:;"
+				onclick="submitReply();">发送</a> <a class="btn btn_border"
+				href="javascript:;" onclick="hidereplyDialog();">取消</a>
+
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
 			
         	function showreplyDialog(data){
 				$('.reply_dialog').height($('#layout').height()+50);
@@ -175,12 +188,13 @@
 				}, 'json');
 				}
 			}
-        </script>    
-    <php>}</php>
-    <!-- 统计代码-->
-<div id="site_analytics_code" style="display:none;"> {$site.site_analytics_code|base64_decode} </div>
-<eq name='site.site_online_count' value='1'> 
-  <script src="{:SITE_URL}/online_check.php?uid={$mid}&uname={$user.uname}&mod={:MODULE_NAME}&app={:APP_NAME}&act={:ACTION_NAME}&action=trace&city={:session('city')}"></script> 
+        </script>
+<php>}</php>
+<!-- 统计代码-->
+<div id="site_analytics_code" style="display: none;">
+	{$site.site_analytics_code|base64_decode}</div>
+<eq name='site.site_online_count' value='1'> <script
+	src="{:SITE_URL}/online_check.php?uid={$mid}&uname={$user.uname}&mod={:MODULE_NAME}&app={:APP_NAME}&act={:ACTION_NAME}&action=trace&city={:session('city')}"></script>
 </eq>
 </body>
 </html>

@@ -1,27 +1,32 @@
-<include file="Public/head"/>
-<body style="background:#fff; padding:40px 0;">
-  <section id="uploadDialogContent">
-  	<div class="upload_img_tab">
-    	<a class="current" href="javascript:;" onClick="switchTab(this,1);">本地上传</a>
-        <a href="javascript:;" onClick="switchTab(this,2);">系统图标</a>
-        <a href="javascript:;" onClick="switchTab(this,3);">最近上传</a>
-    </div>
-    <div class="tab_content" id="tab1" style="padding:20px; display:block">
-      <form id="form"  method="post" class="form-horizontal form-center">
-        <div class="mult_imgs">
-                <div class="upload-img-view" id='mutl_picture'>
-                   
-                </div>
-                <div class="controls uploadrow2" data-max="9" title="点击上传图片">
-                  <input type="file" id="upload_picture">
-                </div>
-            </div>    
-      </form>
+<include file="Public/head" />
+<body style="background: #fff; padding: 40px 0;">
+	<section id="uploadDialogContent">
+		<div class="upload_img_tab">
+			<a class="current" href="javascript:;" onClick="switchTab(this,1);">本地上传</a>
+			<a href="javascript:;" onClick="switchTab(this,2);">系统图标</a> <a
+				href="javascript:;" onClick="switchTab(this,3);">最近上传</a>
+		</div>
+		<div class="tab_content" id="tab1"
+			style="padding: 20px; display: block">
+			<form id="form" method="post" class="form-horizontal form-center">
+				<div class="mult_imgs">
+					<div class="upload-img-view" id='mutl_picture'></div>
+					<div class="controls uploadrow2" data-max="9" title="点击上传图片">
+						<input type="file" id="upload_picture">
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="tab_content load_piclist_box" id="tab2"
+			style="padding: 20px;"></div>
+		<div class="tab_content load_piclist_box" id="tab3"
+			style="padding: 20px;"></div>
+	</section>
+	<div class="upload_dialog_bar">
+		<a class="btn" href="javascript:;" onClick="confirmImage();">确定</a>&nbsp;&nbsp;&nbsp;&nbsp;<a
+			class="border-btn" href="javascript:;"
+			onClick="window.parent.$.Dialog.close();">取消</a>
 	</div>
-    <div class="tab_content load_piclist_box" id="tab2" style="padding:20px;"></div>
-	<div class="tab_content load_piclist_box" id="tab3" style="padding:20px;"></div>
-  </section>
-  <div class="upload_dialog_bar"><a class="btn" href="javascript:;" onClick="confirmImage();">确定</a>&nbsp;&nbsp;&nbsp;&nbsp;<a class="border-btn" href="javascript:;" onClick="window.parent.$.Dialog.close();">取消</a></div>
 </body>
 <script type="text/javascript">
 var maxCount = parseInt("{$_GET['max']}");

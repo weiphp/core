@@ -1,5 +1,4 @@
 <?php
-return array (
-		'view' => 'CustomMenu' 
+return array(
+    'view' => 'CustomMenu'
 );
-					

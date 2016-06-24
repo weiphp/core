@@ -1,54 +1,52 @@
-<include file="Public/mobile_head"/>
-<link href="{:ADDON_PUBLIC_PATH}/css.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+<include file="Public/mobile_head" />
+<link href="{:ADDON_PUBLIC_PATH}/css.css?v={:SITE_VERSION}"
+	rel="stylesheet" type="text/css">
 <body>
-<div id="container" class="container">
-  <form id="form" action="{:U('doAsk?ask_id='.$_GET['ask_id'].'&question_id='.$question['id'])}" method="POST" onSubmit="return checkForm();">
-    <div class="question_content qhead mt0">
-    	<notempty name="question.answer_time">
-    		<div class="leftTime">{$question.answer_time}</div>
-        </notempty>
-        <h4 class="title font16">{$question.title}</h4>
-        <p class="q_tips">{$question.intro}</p>
-    </div>
-    <div class="quesiton_content">
-        <input name="times" value="{$times}" type="hidden">
-        <input name="question_id" value="{$question.id}" type="hidden">
-        <input name="other_answer" id="other_answer" value="" type="hidden">
-        <switch name="question.type">
-          <case value="textarea">
-            <!-- 文本框 -->
-            <div class="form-item cf">
-              <label class="item-label"><span class="check-tips"></span></label>
-              <div class="controls">
-                <textarea type="text" placeholder="请输入" class="text input-medium" name="answer">{$data}</textarea>
-              </div>
-            </div>
-          </case>
-          <case value="checkbox">
-            <volist name="extra" id="vo">
-              <div class="voteItem" type="type_checkbox">
-              	<em class="check">&nbsp;</em>
-                <input type="checkbox" value="{$key}" class="checkbox" name="answer[]">
-                {$key}:{$vo} </div>
-            </volist>
-          </case>
-          <default/>
-          <volist name="extra" id="vo">
-            <div class="voteItem" type="type_radio">
-              <em class="check">&nbsp;</em>
-              <input type="radio" value="{$key}" class="radio"  name="answer[]">
-              {$key}:{$vo} </div>
-          </volist>
-        </switch>
-      </div>
-    <div class="btnWrap" style="margin:0 60px">
-       <a class="start_btn" href="javascript:;" onClick="$('#form').submit();">确认提交</a>
-    </div>
-  </form>
+	<div id="container" class="container">
+		<form id="form"
+			action="{:U('doAsk?ask_id='.$_GET['ask_id'].'&question_id='.$question['id'])}"
+			method="POST" onSubmit="return checkForm();">
+			<div class="question_content qhead mt0">
+				<notempty name="question.answer_time">
+				<div class="leftTime">{$question.answer_time}</div>
+				</notempty>
+				<h4 class="title font16">{$question.title}</h4>
+				<p class="q_tips">{$question.intro}</p>
+			</div>
+			<div class="quesiton_content">
+				<input name="times" value="{$times}" type="hidden"> <input
+					name="question_id" value="{$question.id}" type="hidden"> <input
+					name="other_answer" id="other_answer" value="" type="hidden">
+				<switch name="question.type"> <case value="textarea">
+				<!-- 文本框 -->
+				<div class="form-item cf">
+					<label class="item-label"><span class="check-tips"></span></label>
+					<div class="controls">
+						<textarea type="text" placeholder="请输入" class="text input-medium"
+							name="answer">{$data}</textarea>
+					</div>
+				</div>
+				</case> <case value="checkbox"> <volist name="extra" id="vo">
+				<div class="voteItem" type="type_checkbox">
+					<em class="check">&nbsp;</em> <input type="checkbox" value="{$key}"
+						class="checkbox" name="answer[]"> {$key}:{$vo}
+				</div>
+				</volist> </case> <default /> <volist name="extra" id="vo">
+				<div class="voteItem" type="type_radio">
+					<em class="check">&nbsp;</em> <input type="radio" value="{$key}"
+						class="radio" name="answer[]"> {$key}:{$vo}
+				</div>
+				</volist> </switch>
+			</div>
+			<div class="btnWrap" style="margin: 0 60px">
+				<a class="start_btn" href="javascript:;"
+					onClick="$('#form').submit();">确认提交</a>
+			</div>
+		</form>
 
-  <p class="copyright">{$system_copy_right}{$tongji_code}</p>
-</div>
-<script type="text/javascript">
+		<p class="copyright">{$system_copy_right}{$tongji_code}</p>
+	</div>
+	<script type="text/javascript">
 $(function(){
 	var leftTime = parseInt($('.leftTime').text());
 	setInterval(function(){
@@ -148,6 +146,6 @@ document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
 	});
 }, false);
 </script>
-<include file="Public/mobile_foot"/>
+	<include file="Public/mobile_foot" />
 </body>
 </html>

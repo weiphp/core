@@ -1,54 +1,66 @@
 <?php
 namespace Addons\Payment\Controller;
-class DeliveryAddressInfo {
-	var $address;
 
-	var $mobilePhone;
+class DeliveryAddressInfo
+{
 
-	var $name;
+    public $address;
 
-	var $telPhone;
+    public $mobilePhone;
 
-	var $zipCode;
-	
-	function getAddress() {
-		return $this->address;
-	}
+    public $name;
 
-	function setAddress($address) {
-		$this->address = $address;
-	}
+    public $telPhone;
 
-	function getMobilePhone() {
-		return $this->mobilePhone;
-	}
+    public $zipCode;
 
-	function setMobilePhone($mobilePhone) {
-		$this->mobilePhone = $mobilePhone;
-	}
+    public function getAddress()
+    {
+        return $this->address;
+    }
 
-	function getName() {
-		return $this->name;
-	}
+    public function setAddress($address)
+    {
+        $this->address = $address;
+    }
 
-	function setName($name) {
-		$this->name = $name;
-	}
+    public function getMobilePhone()
+    {
+        return $this->mobilePhone;
+    }
 
-	function getTelPhone() {
-		return $this->telPhone;
-	}
+    public function setMobilePhone($mobilePhone)
+    {
+        $this->mobilePhone = $mobilePhone;
+    }
 
-	function setTelPhone($telPhone) {
-		$this->telPhone = $telPhone;
-	}
+    public function getName()
+    {
+        return $this->name;
+    }
 
-	function getZipCode() {
-		return $this->zipCode;
-	}
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
 
-	function setZipCode($zipCode) {
-		$this->zipCode = $zipCode;
-	}
+    public function getTelPhone()
+    {
+        return $this->telPhone;
+    }
+
+    public function setTelPhone($telPhone)
+    {
+        $this->telPhone = $telPhone;
+    }
+
+    public function getZipCode()
+    {
+        return $this->zipCode;
+    }
+
+    public function setZipCode($zipCode)
+    {
+        $this->zipCode = $zipCode;
+    }
 }
-?>

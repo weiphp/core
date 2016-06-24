@@ -66,244 +66,262 @@ namespace Think;
  * KEY `group_id` (`group_id`)
  * ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
  */
-class Auth {
-	
-	// 默认配置
-	protected $_config = array (
-			'AUTH_ON' => true, // 认证开关
-			'AUTH_GROUP' => 'auth_group', // 用户组数据表名
-			'AUTH_GROUP_ACCESS' => 'auth_group_access', // 用户-用户组关系表
-			'AUTH_RULE' => 'auth_rule', // 权限规则表
-			'AUTH_USER' => 'user' 
-	);
-	public function __construct() {
-		$prefix = C ( 'DB_PREFIX' );
-		$this->_config ['AUTH_GROUP'] = $prefix . $this->_config ['AUTH_GROUP'];
-		$this->_config ['AUTH_RULE'] = $prefix . $this->_config ['AUTH_RULE'];
-		$this->_config ['AUTH_USER'] = $prefix . $this->_config ['AUTH_USER'];
-		$this->_config ['AUTH_GROUP_ACCESS'] = $prefix . $this->_config ['AUTH_GROUP_ACCESS'];
-		if (C ( 'AUTH_CONFIG' )) {
-			// 可设置配置项 AUTH_CONFIG, 此配置项为数组。
-			$this->_config = array_merge ( $this->_config, C ( 'AUTH_CONFIG' ) );
-		}
-	}
-	
-	/**
-	 * 检查权限，验证原则是：禁止一切未授权的
-	 *
-	 * @param
-	 *        	name string|array 需要验证的规则列表,支持逗号分隔的权限规则或索引数组
-	 * @param
-	 *        	uid int 认证用户的id
-	 * @param
-	 *        	string mode 执行check的模式
-	 * @param
-	 *        	relation string 如果为 'or' 表示满足任一条规则即通过验证;如果为 'and'则表示需满足所有规则才能通过验证
-	 * @return boolean 通过验证返回true;失败返回false
-	 */
-	public function check($name, $uid, $mode = 'url', $relation = 'or') {
-		if (! $this->_config ['AUTH_ON'])
-			return true;
-		$authList = $this->getAuthList ( $uid ); // 获取用户需要验证的所有有效规则列表
-		if (is_string ( $name )) {
-			$name = strtolower ( $name );
-			if (strpos ( $name, ',' ) !== false) {
-				$name = explode ( ',', $name );
-			} else {
-				$name = array (
-						$name 
-				);
-			}
-		}
-		$list = array (); // 保存验证通过的规则名
-		if ($mode == 'url') {
-			$REQUEST = unserialize ( strtolower ( serialize ( $_REQUEST ) ) );
-		}
-		foreach ( $authList as $auth ) {
-			$query = preg_replace ( '/^.+\?/U', '', $auth );
-			if ($mode == 'url' && $query != $auth) {
-				parse_str ( $query, $param ); // 解析规则中的param
-				$intersect = array_intersect_assoc ( $REQUEST, $param );
-				$auth = preg_replace ( '/\?.*$/U', '', $auth );
-				if (in_array ( $auth, $name ) && $intersect == $param) { // 如果节点相符且url参数满足
-					$list [] = $auth;
-				}
-			} else if (in_array ( $auth, $name )) {
-				$list [] = $auth;
-			}
-		}
-		if ($relation == 'or' and ! empty ( $list )) {
-			return true;
-		}
-		$diff = array_diff ( $name, $list );
-		if ($relation == 'and' and empty ( $diff )) {
-			return true;
-		}
-		return false;
-	}
-	/**
-	 * 检查权限，验证原则是：开放一切未禁止的，与上面的check方法刚好相反 weiphp 20150715
-	 *
-	 * @param
-	 *        	name string|array 需要验证的规则列表,支持逗号分隔的权限规则或索引数组
-	 * @param
-	 *        	uid int 认证用户的id
-	 * @param
-	 *        	string mode 执行check的模式
-	 * @param
-	 *        	relation string 如果为 'or' 表示满足任一条规则即通过验证;如果为 'and'则表示需满足所有规则才能通过验证
-	 * @return boolean 通过验证返回true;失败返回false
-	 */
-	public function checkRule($name = '', $uid = '', $mode = 'url', $relation = 'or') {
-		if (! $this->_config ['AUTH_ON'])
-			return true;
-		
-		empty ( $uid ) && $uid = session ( 'mid' );
-		if (C ( 'USER_ADMINISTRATOR' ) == $uid)
-			return true;
-		
-		$authList = $this->getAuthList ( $uid, 'not in' ); // 获取用户需要验证的所有禁止规则列表
-		
-		$index_1 = strtolower ( MODULE_NAME . '/*/*' );
-		$index_2 = strtolower ( MODULE_NAME . '/' . CONTROLLER_NAME . '/*' );
-		$index_3 = strtolower ( MODULE_NAME . '/' . CONTROLLER_NAME . '/' . ACTION_NAME );
-		$replace = array (
-				strtolower ( MODULE_NAME ),
-				strtolower ( CONTROLLER_NAME ),
-				strtolower ( ACTION_NAME ) 
-		);
-		if ($index_3 == 'home/addons/execute' || $index_3 == 'home/addons/plugin') {
-			$index_1 = strtolower ( _ADDONS . '/*/*' );
-			$index_2 = strtolower ( _ADDONS . '/' . _CONTROLLER . '/*' );
-			$index_3 = strtolower ( _ADDONS . '/' . _CONTROLLER . '/' . _ACTION );
-			$replace = array (
-					strtolower ( _ADDONS ),
-					strtolower ( _CONTROLLER ),
-					strtolower ( _ACTION ) 
-			);
-		}
-		
-		if (empty ( $name )) {
-			$name = array (
-					$index_1,
-					$index_2,
-					$index_3 
-			);
-		} elseif (is_string ( $name )) {
-			$name = strtolower ( $name );
-			if (strpos ( $name, ',' ) !== false) {
-				$name = explode ( ',', $name );
-			} else {
-				$name = array (
-						$name 
-				);
-			}
-		}
-		// 替换一些变量类的规则
-		foreach ( $name as &$n ) {
-			$n = str_replace ( array (
-					'__MODULE__',
-					'__CONTROLLER__',
-					'__ACTION__' 
-			), $replace, $n );
-		}
-		
-		$list = array (); // 保存验证通过的规则名
-		if ($mode == 'url') {
-			$REQUEST = unserialize ( strtolower ( serialize ( $_REQUEST ) ) );
-		}
-		foreach ( $authList as $auth ) {
-			$query = preg_replace ( '/^.+\?/U', '', $auth );
-			if ($mode == 'url' && $query != $auth) {
-				parse_str ( $query, $param ); // 解析规则中的param
-				$intersect = array_intersect_assoc ( $REQUEST, $param );
-				$auth = preg_replace ( '/\?.*$/U', '', $auth );
-				if (in_array ( $auth, $name ) && $intersect == $param) { // 如果节点相符且url参数满足
-					$list [] = $auth;
-				}
-			} else if (in_array ( $auth, $name )) {
-				$list [] = $auth;
-			}
-		}
-		if ($relation == 'or' and ! empty ( $list )) {
-			return false;
-		}
-		$diff = array_diff ( $name, $list );
-		if ($relation == 'and' and empty ( $diff )) {
-			return false;
-		}
-		return true;
-	}
-	
-	/**
-	 * 根据用户id获取用户组,返回值为数组
-	 *
-	 * @param
-	 *        	uid int 用户id
-	 * @return array 用户所属的用户组 array(
-	 *         array('uid'=>'用户id','group_id'=>'用户组id','title'=>'用户组名称','rules'=>'用户组拥有的规则id,多个,号隔开'),
-	 *         ...)
-	 */
-	public function getGroups($uid) {
-		static $groups = array ();
-		if (isset ( $groups [$uid] ))
-			return $groups [$uid];
-		$user_groups = M ()->table ( $this->_config ['AUTH_GROUP_ACCESS'] . ' a' )->where ( "a.uid='$uid' and g.status='1'" )->join ( $this->_config ['AUTH_GROUP'] . " g on a.group_id=g.id" )->field ( 'a.uid,a.group_id,g.title,g.rules' )->select ();
-		$groups [$uid] = $user_groups ?  : array ();
-		return $groups [$uid];
-	}
-	
-	/**
-	 * 获得权限列表
-	 *
-	 * @param integer $uid
-	 *        	用户id
-	 */
-	protected function getAuthList($uid, $type = 'in') {
-		static $_authList = array (); // 保存用户验证通过的权限列表
-		$t = $type == 'in' ? 'in' : 'notin';
-		if (isset ( $_authList [$uid . $t] )) {
-			return $_authList [$uid . $t];
-		}
-		
-		// 读取用户所属用户组
-		$groups = $this->getGroups ( $uid );
-		$ids = array (); // 保存用户所属用户组设置的所有权限规则id
-		foreach ( $groups as $g ) {
-			$ids = array_merge ( $ids, explode ( ',', trim ( $g ['rules'], ',' ) ) );
-		}
-		$ids = array_unique ( $ids );
-		if (empty ( $ids )) {
-			$_authList [$uid . $t] = array ();
-			return array ();
-		}
-		
-		$map ['id'] = array (
-				$type,
-				$ids 
-		);
-		$map ['status'] = 1;
-		// 读取用户组所有权限规则
-		$rules = M ()->table ( $this->_config ['AUTH_RULE'] )->where ( $map )->field ( 'condition,name' )->select ();
-		
-		// 循环规则，判断结果。
-		$authList = array (); //
-		foreach ( $rules as $rule ) {
-			if (! empty ( $rule ['condition'] )) { // 根据condition进行验证
-				$user = getUserInfo ( $uid ); // 获取用户信息,一维数组
-				
-				$command = preg_replace ( '/\{(\w*?)\}/', '$user[\'\\1\']', $rule ['condition'] );
-				// dump($command);//debug
-				@(eval ( '$condition=(' . $command . ');' ));
-				if ($condition) {
-					$authList [] = strtolower ( $rule ['name'] );
-				}
-			} else {
-				// 只要存在就记录
-				$authList [] = strtolower ( $rule ['name'] );
-			}
-		}
-		$_authList [$uid . $t] = $authList;
-		return array_unique ( $authList );
-	}
+class Auth
+{
+    // 默认配置
+    protected $_config = array(
+        'AUTH_ON' => true, // 认证开关
+        'AUTH_GROUP' => 'auth_group', // 用户组数据表名
+        'AUTH_GROUP_ACCESS' => 'auth_group_access', // 用户-用户组关系表
+        'AUTH_RULE' => 'auth_rule', // 权限规则表
+        'AUTH_USER' => 'user'
+    );
+
+    public function __construct()
+    {
+        $prefix = C('DB_PREFIX');
+        $this->_config['AUTH_GROUP'] = $prefix . $this->_config['AUTH_GROUP'];
+        $this->_config['AUTH_RULE'] = $prefix . $this->_config['AUTH_RULE'];
+        $this->_config['AUTH_USER'] = $prefix . $this->_config['AUTH_USER'];
+        $this->_config['AUTH_GROUP_ACCESS'] = $prefix . $this->_config['AUTH_GROUP_ACCESS'];
+        if (C('AUTH_CONFIG')) {
+            // 可设置配置项 AUTH_CONFIG, 此配置项为数组。
+            $this->_config = array_merge($this->_config, C('AUTH_CONFIG'));
+        }
+    }
+
+    /**
+     * 检查权限，验证原则是：禁止一切未授权的
+     *
+     * @param
+     *            name string|array 需要验证的规则列表,支持逗号分隔的权限规则或索引数组
+     * @param
+     *            uid int 认证用户的id
+     * @param
+     *            string mode 执行check的模式
+     * @param
+     *            relation string 如果为 'or' 表示满足任一条规则即通过验证;如果为 'and'则表示需满足所有规则才能通过验证
+     * @return boolean 通过验证返回true;失败返回false
+     */
+    public function check($name, $uid, $mode = 'url', $relation = 'or')
+    {
+        if (! $this->_config['AUTH_ON']) {
+            return true;
+        }
+        $authList = $this->getAuthList($uid); // 获取用户需要验证的所有有效规则列表
+        if (is_string($name)) {
+            $name = strtolower($name);
+            if (strpos($name, ',') !== false) {
+                $name = explode(',', $name);
+            } else {
+                $name = array(
+                    $name
+                );
+            }
+        }
+        $list = array(); // 保存验证通过的规则名
+        if ($mode == 'url') {
+            $REQUEST = unserialize(strtolower(serialize($_REQUEST)));
+        }
+        foreach ($authList as $auth) {
+            $query = preg_replace('/^.+\?/U', '', $auth);
+            if ($mode == 'url' && $query != $auth) {
+                parse_str($query, $param); // 解析规则中的param
+                $intersect = array_intersect_assoc($REQUEST, $param);
+                $auth = preg_replace('/\?.*$/U', '', $auth);
+                if (in_array($auth, $name) && $intersect == $param) { // 如果节点相符且url参数满足
+                    $list[] = $auth;
+                }
+            } elseif (in_array($auth, $name)) {
+                $list[] = $auth;
+            }
+        }
+        if ($relation == 'or' and ! empty($list)) {
+            return true;
+        }
+        $diff = array_diff($name, $list);
+        if ($relation == 'and' and empty($diff)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 检查权限，验证原则是：开放一切未禁止的，与上面的check方法刚好相反 weiphp 20150715
+     *
+     * @param
+     *            name string|array 需要验证的规则列表,支持逗号分隔的权限规则或索引数组
+     * @param
+     *            uid int 认证用户的id
+     * @param
+     *            string mode 执行check的模式
+     * @param
+     *            relation string 如果为 'or' 表示满足任一条规则即通过验证;如果为 'and'则表示需满足所有规则才能通过验证
+     * @return boolean 通过验证返回true;失败返回false
+     */
+    public function checkRule($name = '', $uid = '', $mode = 'url', $relation = 'or')
+    {
+        if (! $this->_config['AUTH_ON']) {
+            return true;
+        }
+        
+        empty($uid) && $uid = session('mid');
+        if (C('USER_ADMINISTRATOR') == $uid) {
+            return true;
+        }
+        
+        $authList = $this->getAuthList($uid, 'not in'); // 获取用户需要验证的所有禁止规则列表
+        
+        $index_1 = strtolower(MODULE_NAME . '/*/*');
+        $index_2 = strtolower(MODULE_NAME . '/' . CONTROLLER_NAME . '/*');
+        $index_3 = strtolower(MODULE_NAME . '/' . CONTROLLER_NAME . '/' . ACTION_NAME);
+        $replace = array(
+            strtolower(MODULE_NAME),
+            strtolower(CONTROLLER_NAME),
+            strtolower(ACTION_NAME)
+        );
+        if ($index_3 == 'home/addons/execute' || $index_3 == 'home/addons/plugin') {
+            $index_1 = strtolower(_ADDONS . '/*/*');
+            $index_2 = strtolower(_ADDONS . '/' . _CONTROLLER . '/*');
+            $index_3 = strtolower(_ADDONS . '/' . _CONTROLLER . '/' . _ACTION);
+            $replace = array(
+                strtolower(_ADDONS),
+                strtolower(_CONTROLLER),
+                strtolower(_ACTION)
+            );
+        }
+        
+        if (empty($name)) {
+            $name = array(
+                $index_1,
+                $index_2,
+                $index_3
+            );
+        } elseif (is_string($name)) {
+            $name = strtolower($name);
+            if (strpos($name, ',') !== false) {
+                $name = explode(',', $name);
+            } else {
+                $name = array(
+                    $name
+                );
+            }
+        }
+        // 替换一些变量类的规则
+        foreach ($name as &$n) {
+            $n = str_replace(array(
+                '__MODULE__',
+                '__CONTROLLER__',
+                '__ACTION__'
+            ), $replace, $n);
+        }
+        
+        $list = array(); // 保存验证通过的规则名
+        if ($mode == 'url') {
+            $REQUEST = unserialize(strtolower(serialize($_REQUEST)));
+        }
+        foreach ($authList as $auth) {
+            $query = preg_replace('/^.+\?/U', '', $auth);
+            if ($mode == 'url' && $query != $auth) {
+                parse_str($query, $param); // 解析规则中的param
+                $intersect = array_intersect_assoc($REQUEST, $param);
+                $auth = preg_replace('/\?.*$/U', '', $auth);
+                if (in_array($auth, $name) && $intersect == $param) { // 如果节点相符且url参数满足
+                    $list[] = $auth;
+                }
+            } elseif (in_array($auth, $name)) {
+                $list[] = $auth;
+            }
+        }
+        if ($relation == 'or' and ! empty($list)) {
+            return false;
+        }
+        $diff = array_diff($name, $list);
+        if ($relation == 'and' and empty($diff)) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 根据用户id获取用户组,返回值为数组
+     *
+     * @param
+     *            uid int 用户id
+     * @return array 用户所属的用户组 array(
+     *         array('uid'=>'用户id','group_id'=>'用户组id','title'=>'用户组名称','rules'=>'用户组拥有的规则id,多个,号隔开'),
+     *         ...)
+     */
+    public function getGroups($uid)
+    {
+        static $groups = array();
+        if (isset($groups[$uid])) {
+            return $groups[$uid];
+        }
+        $user_groups = M()->table($this->_config['AUTH_GROUP_ACCESS'] . ' a')
+            ->where("a.uid='$uid' and g.status='1'")
+            ->join($this->_config['AUTH_GROUP'] . " g on a.group_id=g.id")
+            ->field('a.uid,a.group_id,g.title,g.rules')
+            ->select();
+        $groups[$uid] = $user_groups ?: array();
+        return $groups[$uid];
+    }
+
+    /**
+     * 获得权限列表
+     *
+     * @param integer $uid
+     *            用户id
+     */
+    protected function getAuthList($uid, $type = 'in')
+    {
+        static $_authList = array(); // 保存用户验证通过的权限列表
+        $t = $type == 'in' ? 'in' : 'notin';
+        if (isset($_authList[$uid . $t])) {
+            return $_authList[$uid . $t];
+        }
+        
+        // 读取用户所属用户组
+        $groups = $this->getGroups($uid);
+        $ids = array(); // 保存用户所属用户组设置的所有权限规则id
+        foreach ($groups as $g) {
+            $ids = array_merge($ids, explode(',', trim($g['rules'], ',')));
+        }
+        $ids = array_unique($ids);
+        if (empty($ids)) {
+            $_authList[$uid . $t] = array();
+            return array();
+        }
+        
+        $map['id'] = array(
+            $type,
+            $ids
+        );
+        $map['status'] = 1;
+        // 读取用户组所有权限规则
+        $rules = M()->table($this->_config['AUTH_RULE'])
+            ->where($map)
+            ->field('condition,name')
+            ->select();
+        
+        // 循环规则，判断结果。
+        $authList = array(); //
+        foreach ($rules as $rule) {
+            if (! empty($rule['condition'])) { // 根据condition进行验证
+                $user = getUserInfo($uid); // 获取用户信息,一维数组
+                
+                $command = preg_replace('/\{(\w*?)\}/', '$user[\'\\1\']', $rule['condition']);
+                // dump($command);//debug
+                @(eval('$condition=(' . $command . ');'));
+                if ($condition) {
+                    $authList[] = strtolower($rule['name']);
+                }
+            } else {
+                // 只要存在就记录
+                $authList[] = strtolower($rule['name']);
+            }
+        }
+        $_authList[$uid . $t] = $authList;
+        return array_unique($authList);
+    }
 }

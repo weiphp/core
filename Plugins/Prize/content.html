@@ -1,104 +1,120 @@
 <style type="text/css">
-.address input{
-	width:100px;	
+.address input {
+	width: 100px;
 }
-.prizeDialog{
+
+.prizeDialog {
 	padding: 30px;
-    height: 500px;
-    overflow: auto;
-    position: relative;
+	height: 500px;
+	overflow: auto;
+	position: relative;
 }
+
 .prizeDialog ul {
-    zoom: 1;
-    overflow: auto;
-    border-top: 1px solid #ddd;
-   height: 450px;
+	zoom: 1;
+	overflow: auto;
+	border-top: 1px solid #ddd;
+	height: 450px;
 }
-.prizeDialog li{
-	height:50px;
+
+.prizeDialog li {
+	height: 50px;
 	line-height: 50px;
-    border: 1px solid #ddd;
-    border-top: none;
-    padding: 10px;
+	border: 1px solid #ddd;
+	border-top: none;
+	padding: 10px;
 }
-.prizeDialog li span{		 
-	width:100px;
-	 height:50px;
-	 float:left;
-   text-align:center;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;	   
+
+.prizeDialog li span {
+	width: 100px;
+	height: 50px;
+	float: left;
+	text-align: center;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
+
 .prizeDialog .m15 {
-    position: absolute;
-    right: 0;
-    left: 0;
-    bottom: 20px;
-    text-align: center;}
-.img img{
-	  width:50px;
-	  height:50px;
+	position: absolute;
+	right: 0;
+	left: 0;
+	bottom: 20px;
+	text-align: center;
 }
-.shop_tr input{
-	width:100px;	
+
+.img img {
+	width: 50px;
+	height: 50px;
 }
-.shop_id{float: right;margin-top: 20px;}
+
+.shop_tr input {
+	width: 100px;
+}
+
+.shop_id {
+	float: right;
+	margin-top: 20px;
+}
 </style>
-<input type="hidden" value="{$default_value}" name="{$name}" id="prize_res_{$name}" data-type='{$default_type}' data-id='{$default_id}' />
+<input type="hidden" value="{$default_value}" name="{$name}"
+	id="prize_res_{$name}" data-type='{$default_type}'
+	data-id='{$default_id}' />
 <div class="controls">
-<table id="awardList" class="form_table" cellpadding="0" cellspacing="1">
-	<thead>
-	<tr>
-		<td>奖品编号</td>
-        <td>奖品名称</td>
-        <td>奖品图片</td>
-        <td>奖品类型</td>
-        <td><span class="need_flag">*</span>奖品库存</td>
-        <td><span class="need_flag">*</span>奖品数量</td>
-        <td>操作</td>
-		 </tr>
-	</thead>
-	 <tbody>
-<volist name="prize_detail.title" id="vo">
-    <tr class="shop_tr">
-    	<td><input type="hidden" data-name="repeat_id" value="{$prize_detail['type'][$key]}:{$prize_detail['id'][$key]}" />{$prize_detail['id'][$key]}</td>
-        <td>{$vo}</td>
-        <td><img src="{$prize_detail['img'][$key]}" width='50' height='50'/></td>
-        <td>{$prize_detail['typeName'][$key]}</td>
-        <td>
-        <if condition="$prize_detail['type'][$key]=='points'">
-        	<span>奖励积分数：</span><input style="width:60px" class="pointsNum" type="number" name="{$prize_detail['id'][$key]}" data="points:{$prize_detail['id'][$key]}" value="{$prize_detail['total_count'][$key]}"/>
-        <else/>
-        	{$prize_detail['total_count'][$key]}
-        </if>
-        </td>
-        <td>
-		<if condition="$prize_detail['type'][$key]=='points'">
-        	<input type="number" class="prizePointsNum" name="{$prize_detail['type'][$key]}" value="{$prize_detail['num'][$key]}" data="{$prize_detail['type'][$key]}:{$prize_detail['id'][$key]}"/>
-		<else/>
-       		<input type="number" class="prizeNum" name="{$prize_detail['type'][$key]}" value="{$prize_detail['num'][$key]}" data="{$prize_detail['type'][$key]}:{$prize_detail['id'][$key]}"/>
-		</if>
-        </td>
-        <td>
-        <if condition="$prize_detail['type'][$key]=='points'">
-        	<a href="javascript:;" onclick="removePointsAddress(this)">删除</a>
-		<else/>
-        	<a href="javascript:;" onclick="removeSingleAddress(this)">删除</a>
-        </td>
-        </if>
-    </tr>
- </volist>
- 	<tr class="add_tr"><td colspan="7">
-    	<a class="realPrize"  href="javascript:;">+添加实物奖品</a>
-    	<a class="redBag" href="javascript:;" >+添加红包奖品</a>
-    	<a class="cardVouchers" href="javascript:;">+添加卡卷奖品</a>
-    	<a class="coupon" href="javascript:;">+添加优惠卷奖品</a>
-    	<!--<a class="shopCoupon" href="javascript:;">+添加代金卷奖品</a>-->
-    	<a class="points" href="javascript:;">+添加积分奖品</a>
-    </td></tr>
-	</tbody>
-</table>
+	<table id="awardList" class="form_table" cellpadding="0"
+		cellspacing="1">
+		<thead>
+			<tr>
+				<td>奖品编号</td>
+				<td>奖品名称</td>
+				<td>奖品图片</td>
+				<td>奖品类型</td>
+				<td><span class="need_flag">*</span>奖品库存</td>
+				<td><span class="need_flag">*</span>奖品数量</td>
+				<td>操作</td>
+			</tr>
+		</thead>
+		<tbody>
+			<volist name="prize_detail.title" id="vo">
+			<tr class="shop_tr">
+				<td><input type="hidden" data-name="repeat_id"
+					value="{$prize_detail['type'][$key]}:{$prize_detail['id'][$key]}" />{$prize_detail['id'][$key]}</td>
+				<td>{$vo}</td>
+				<td><img src="{$prize_detail['img'][$key]}" width='50'
+					height='50' /></td>
+				<td>{$prize_detail['typeName'][$key]}</td>
+				<td><if condition="$prize_detail['type'][$key]=='points'">
+					<span>奖励积分数：</span>
+					<input style="width: 60px" class="pointsNum" type="number"
+						name="{$prize_detail['id'][$key]}"
+						data="points:{$prize_detail['id'][$key]}"
+						value="{$prize_detail['total_count'][$key]}" /> <else />
+					{$prize_detail['total_count'][$key]} </if></td>
+				<td><if condition="$prize_detail['type'][$key]=='points'">
+					<input type="number" class="prizePointsNum"
+						name="{$prize_detail['type'][$key]}"
+						value="{$prize_detail['num'][$key]}"
+						data="{$prize_detail['type'][$key]}:{$prize_detail['id'][$key]}" />
+					<else /> <input type="number" class="prizeNum"
+						name="{$prize_detail['type'][$key]}"
+						value="{$prize_detail['num'][$key]}"
+						data="{$prize_detail['type'][$key]}:{$prize_detail['id'][$key]}" />
+					</if></td>
+				<td><if condition="$prize_detail['type'][$key]=='points'">
+					<a href="javascript:;" onclick="removePointsAddress(this)">删除</a> <else />
+					<a href="javascript:;" onclick="removeSingleAddress(this)">删除</a></td>
+				</if>
+			</tr>
+			</volist>
+			<tr class="add_tr">
+				<td colspan="7"><a class="realPrize" href="javascript:;">+添加实物奖品</a>
+					<a class="redBag" href="javascript:;">+添加红包奖品</a> <a
+					class="cardVouchers" href="javascript:;">+添加卡卷奖品</a> <a
+					class="coupon" href="javascript:;">+添加优惠卷奖品</a> <!--<a class="shopCoupon" href="javascript:;">+添加代金卷奖品</a>-->
+					<a class="points" href="javascript:;">+添加积分奖品</a></td>
+			</tr>
+		</tbody>
+	</table>
 </div>
 <script>
   function chooseAward(dataUrl,prizeType,enType){

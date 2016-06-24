@@ -1,5 +1,5 @@
 <?php
-return array (
-		'cate' => '医疗',
-		'author' => 'easyicon'
-);					
+return array(
+    'cate' => '医疗',
+    'author' => 'easyicon'
+);

@@ -1,34 +1,32 @@
 <?php
-/////////////////////////////////////////////////////////////////
-/// getID3() by James Heinrich <info@getid3.org>               //
-//  available at http://getid3.sourceforge.net                 //
-//            or http://www.getid3.org                         //
-//          also https://github.com/JamesHeinrich/getID3       //
-/////////////////////////////////////////////////////////////////
-//                                                             //
-// /demo/demo.basic.php - part of getID3()                     //
-// Sample script showing most basic use of getID3()            //
-// See readme.txt for more details                             //
-//                                                            ///
-/////////////////////////////////////////////////////////////////
-
-die('Due to a security issue, this demo has been disabled. It can be enabled by removing line '.__LINE__.' in '.$_SERVER['PHP_SELF']);
-
+// ///////////////////////////////////////////////////////////////
+// / getID3() by James Heinrich <info@getid3.org> //
+// available at http://getid3.sourceforge.net //
+// or http://www.getid3.org //
+// also https://github.com/JamesHeinrich/getID3 //
+// ///////////////////////////////////////////////////////////////
+// //
+// /demo/demo.basic.php - part of getID3() //
+// Sample script showing most basic use of getID3() //
+// See readme.txt for more details //
+// ///
+// ///////////////////////////////////////////////////////////////
+die('Due to a security issue, this demo has been disabled. It can be enabled by removing line ' . __LINE__ . ' in ' . $_SERVER['PHP_SELF']);
 
 // include getID3() library (can be in a different directory if full path is specified)
-require_once('../getid3/getid3.php');
+require_once ('../getid3/getid3.php');
 
 // Initialize getID3 engine
-$getID3 = new getID3;
+$getID3 = new getID3();
 
 // Analyze file and store returned data in $ThisFileInfo
 $ThisFileInfo = $getID3->analyze($filename);
 
 /*
- Optional: copies data from all subarrays of [tags] into [comments] so
- metadata is all available in one location for all tag formats
- metainformation is always available under [tags] even if this is not called
-*/
+ * Optional: copies data from all subarrays of [tags] into [comments] so
+ * metadata is all available in one location for all tag formats
+ * metainformation is always available under [tags] even if this is not called
+ */
 getid3_lib::CopyTagsToComments($ThisFileInfo);
 
 /*
@@ -50,3 +48,4 @@ getid3_lib::CopyTagsToComments($ThisFileInfo);
  if you want to see ALL the output, uncomment this line:
 */
 //echo '<pre>'.htmlentities(print_r($ThisFileInfo, true)).'</pre>';
+

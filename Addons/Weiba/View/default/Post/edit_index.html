@@ -1,58 +1,60 @@
 <extend name="Base/common" />
-<block name="body">
-  
-  <!-- 标签页导航 -->
-  <div class="span9 page_message">
-    <section id="contents">
-      <include file="Addons/_nav" />
-      <div class="tab-content"> 
-        <!-- 表单 -->
-        <php> $post_url || $post_url = U('edit_index?model='.$model['id'], $get_param);</php>
-        <form id="form" action="{$post_url}" method="post" class="form-horizontal form-center">
-   	<div id='nid' style="display:none">
-             	<input  name="id" value="{$data.id}">
-            </div>
-            <div class="controls" id='tiezi'>
-		
-		<a onClick="addPost()" >选择帖子</a>
+<block name="body"> <!-- 标签页导航 -->
+<div class="span9 page_message">
+	<section id="contents">
+		<include file="Addons/_nav" />
+		<div class="tab-content">
+			<!-- 表单 -->
+			<php> $post_url || $post_url =
+			U('edit_index?model='.$model['id'], $get_param);</php>
+			<form id="form" action="{$post_url}" method="post"
+				class="form-horizontal form-center">
+				<div id='nid' style="display: none">
+					<input name="id" value="{$data.id}">
+				</div>
+				<div class="controls" id='tiezi'>
+
+					<a onClick="addPost()">选择帖子</a>
+				</div>
+				<div class="form-item" id="post">
+					<label class="item-label">帖子标题</label>
+					<div class="controls">
+						<input type="text" class="text" name="title" value="{$data.title}"
+							readonly>
+					</div>
+				</div>
+
+				<div class="controls"></div>
+				<div class="form-item">
+					<label class="item-label">帖子图片</label>
+					<div class="controls uploadrow2" data-max="1" title="点击修改图片"
+						rel="index_img">
+						<input type="file" id="upload_picture_index_img"> <input
+							type="hidden" name="index_img" id="cover_id_index_img"
+							value="{$data.index_img}" />
+						<div class="upload-img-box">
+							<notempty name="data['index_img']">
+							<div class="upload-pre-item2">
+								<img width="100" height="100"
+									src="{$data.index_img|get_cover_url}" />
+							</div>
+							<em class="edit_img_icon">&nbsp;</em> </notempty>
+						</div>
+					</div>
+				</div>
 		</div>
-           <div class="form-item" id="post" >   
-          	 <label class="item-label">帖子标题</label>
-             <div class="controls">
-             	<input type="text" class="text" name="title" value="{$data.title}" readonly>
-             </div>
-            </div>
-            
-            <div class="controls">
-		
+		<div class="form-item form_bh" style="text-align: center">
+			<notempty name="data.id">
+			<input type="hidden" name="id" value="{$data.id}"></notempty>
+			<button class="btn submit-btn ajax-post" id="submit" type="submit"
+				target-form="form-horizontal">{$submit_name|default='确 定'}</button>
 		</div>
-            <div class="form-item">   
-             <label class="item-label">帖子图片</label>
-          	 <div class="controls uploadrow2" data-max="1" title="点击修改图片" rel="index_img">
-                    <input type="file" id="upload_picture_index_img">
-                    <input type="hidden" name="index_img" id="cover_id_index_img" value="{$data.index_img}"/>
-                    <div class="upload-img-box">
-                      <notempty name="data['index_img']">
-                        <div class="upload-pre-item2"><img width="100" height="100" src="{$data.index_img|get_cover_url}"/></div>
-                        <em class="edit_img_icon">&nbsp;</em>
-                      </notempty>
-                    </div>
-                  </div>
-            </div>
-           
-        </div>
-        <div class="form-item form_bh" style="text-align:center">
-            <notempty name="data.id"><input type="hidden" name="id" value="{$data.id}"></notempty>
-            <button class="btn submit-btn ajax-post" id="submit" type="submit" target-form="form-horizontal">{$submit_name|default='确 定'}</button>
-          </div>
-      </form>
-      </div>
-    </section>
-  </div>
+		</form>
+</div>
+</section>
+</div>
 </block>
-<block name="script">
-  
-  <script type="text/javascript">
+<block name="script"> <script type="text/javascript">
   $(function(){
 	var UploadFileExts = "{$UploadFileExts}";
 	initUploadImg();
@@ -121,5 +123,4 @@
     })
 	};
 	
-</script> 
-</block>
+</script> </block>

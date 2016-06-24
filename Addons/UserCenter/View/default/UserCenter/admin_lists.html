@@ -1,68 +1,70 @@
-<include file="Public/head"/>
-<body style="background:#fff">
-<div class="lists_data">
-  <div class="span9 page_message">
-    <section id="contents"> 
-      <div class="table-bar">
-        
-        <!-- 高级搜索 -->
-        <div class="search-form fr cf">
-          <div class="sleft">
-            <input type="text" placeholder="请输入关键字" value="{:I('nickname')}" class="search-input" name="nickname">
-            <a url="{:addons_url('UserCenter://UserCenter/admin_lists',$get_param)}" id="search" href="javascript:;" class="sch-btn"><i class="btn-search"></i></a> </div>
-        </div>
-        <!-- 多维过滤 --> 
-      </div>
-      <!-- 数据列表 -->
-      <div class="data-table">
-        <div class="table-striped">
-          <table cellspacing="1">
-            <!-- 表头 -->
-            <thead>
-              <tr>
-                <th class="row-selected row-selected"> 
-                  <if condition="!isRadio">
-                  <input type="checkbox" class="check-all regular-checkbox" id="checkAll">
-                  <label for="checkAll"></label></th>
-                  </if>
-                <th>头像</th>
-                <th>用户昵称</th>
-                <th>性别</th>
-                <th>分组</th>
-              </tr>
-            </thead>
-            
-            <!-- 列表 -->
-            <tbody>
-              <volist name="list_data" id="vo">
-                <tr>
-                  <td>
-                   <empty name="isRadio">
-                  		<input type="checkbox" id="check_{$vo.uid}" name="ids[]" value="{$vo.uid}" class="ids regular-checkbox">
-                    	<label for="check_{$vo.uid}"></label>
-                    <else/>
-                    	<input type="radio" id="check_{$vo.uid}" name="ids[]" value="{$vo.uid}" class="ids regular-radio">
-                    	<label for="check_{$vo.uid}"></label>
-                    </empty>
-                    <input type="hidden" name="openid" value="{$vo.openid}"/>
-                  </td>
-                  <td type="headimgurl">{$vo.headimgurl|url_img_html}</td>
-                  <td type="nickname">{$vo.nickname}</td>
-                  <td type="sex_name">{$vo.sex_name}</td>
-                  <td type="group">{$vo.group}</td>
-                 
-                  
-                </tr>
-              </volist>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div class="page"> {$_page|default=''} </div>
-    </section>
-  </div>
-  
-<script type="text/javascript">
+<include file="Public/head" />
+<body style="background: #fff">
+	<div class="lists_data">
+		<div class="span9 page_message">
+			<section id="contents">
+				<div class="table-bar">
+
+					<!-- 高级搜索 -->
+					<div class="search-form fr cf">
+						<div class="sleft">
+							<input type="text" placeholder="请输入关键字" value="{:I('nickname')}"
+								class="search-input" name="nickname"> <a
+								url="{:addons_url('UserCenter://UserCenter/admin_lists',$get_param)}"
+								id="search" href="javascript:;" class="sch-btn"><i
+								class="btn-search"></i></a>
+						</div>
+					</div>
+					<!-- 多维过滤 -->
+				</div>
+				<!-- 数据列表 -->
+				<div class="data-table">
+					<div class="table-striped">
+						<table cellspacing="1">
+							<!-- 表头 -->
+							<thead>
+								<tr>
+									<th class="row-selected row-selected"><if
+											condition="!isRadio"> <input type="checkbox"
+											class="check-all regular-checkbox" id="checkAll"> <label
+											for="checkAll"></label></th>
+									</if>
+									<th>头像</th>
+									<th>用户昵称</th>
+									<th>性别</th>
+									<th>分组</th>
+								</tr>
+							</thead>
+
+							<!-- 列表 -->
+							<tbody>
+								<volist name="list_data" id="vo">
+								<tr>
+									<td><empty name="isRadio"> <input type="checkbox"
+											id="check_{$vo.uid}" name="ids[]" value="{$vo.uid}"
+											class="ids regular-checkbox"> <label
+											for="check_{$vo.uid}"></label> <else /> <input type="radio"
+											id="check_{$vo.uid}" name="ids[]" value="{$vo.uid}"
+											class="ids regular-radio"> <label
+											for="check_{$vo.uid}"></label> </empty> <input type="hidden"
+										name="openid" value="{$vo.openid}" /></td>
+									<td type="headimgurl">{$vo.headimgurl|url_img_html}</td>
+									<td type="nickname">{$vo.nickname}</td>
+									<td type="sex_name">{$vo.sex_name}</td>
+									<td type="group">{$vo.group}</td>
+
+
+								</tr>
+								</volist>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="page">{$_page|default=''}</div>
+			</section>
+		</div>
+
+		<script type="text/javascript">
 $(function(){
 	//搜索功能
 	$("#search").click(function(){
@@ -92,6 +94,6 @@ $(function(){
 	});	
 	
 })
-</script> 
+</script>
 </body>
 </html>

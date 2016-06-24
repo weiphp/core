@@ -8,30 +8,35 @@
  * 
  */
 namespace Addons\Payment\Controller;
-class WapResponseHandler extends ResponseHandler {
-	
-	function __construct() {
-		$this->WapResponseHandler();
-	}
-	
-	function WapResponseHandler(){
-		parent::ResponseHandler();
-	}
-	
-	function isTenpaySign() {
-		//签名需要按照数组中存在的元素进行
-		$keysArr = array(				
-				"ver",
-				"charset",
-				"pay_result",
-				"transaction_id",
-				"sp_billno",
-				"total_fee",
-				"fee_type",
-				"bargainor_id",
-				"attach",
-				"time_end"
-		);	
-		return parent::isTenpaySign($keysArr);	
-	}
+
+class WapResponseHandler extends ResponseHandler
+{
+
+    public function __construct()
+    {
+        $this->WapResponseHandler();
+    }
+
+    public function WapResponseHandler()
+    {
+        parent::ResponseHandler();
+    }
+
+    public function isTenpaySign()
+    {
+        // 签名需要按照数组中存在的元素进行
+        $keysArr = array(
+            "ver",
+            "charset",
+            "pay_result",
+            "transaction_id",
+            "sp_billno",
+            "total_fee",
+            "fee_type",
+            "bargainor_id",
+            "attach",
+            "time_end"
+        );
+        return parent::isTenpaySign($keysArr);
+    }
 }

@@ -1,10 +1,8 @@
  <?php
-include_once("WxPayHelper.php");
-
+include_once ("WxPayHelper.php");
 
 $commonUtil = new CommonUtil();
 $wxPayHelper = new WxPayHelper();
-
 
 $wxPayHelper->setParameter("bank_type", "WX");
 $wxPayHelper->setParameter("body", "test");
@@ -15,10 +13,6 @@ $wxPayHelper->setParameter("fee_type", "1");
 $wxPayHelper->setParameter("notify_url", "htttp://www.baidu.com");
 $wxPayHelper->setParameter("spbill_create_ip", "127.0.0.1");
 $wxPayHelper->setParameter("input_charset", "GBK");
-
-
-
-
 
 ?>
 <html>
@@ -32,6 +26,6 @@ function callpay()
 }
 </script>
 <body>
-<button type="button" onclick="callpay()">wx pay test</button>
+	<button type="button" onclick="callpay()">wx pay test</button>
 </body>
 </html>

@@ -1,23 +1,23 @@
-<extend name="Public/base"/>
+<extend name="Public/base" />
 
 <block name="sidebar"></block>
 
 <block name="style">
-    <style>
-        body{padding: 0}
-    </style>
+<style>
+body {
+	padding: 0
+}
+</style>
 </block>
 
-<block name="body">
-    <!-- 主体 -->
-    <div id="indexMain" class="index-main">
-       <!-- 插件块 -->
-       <div class="container-span">{:hook('AdminIndex')}</div>
-    </div>
+<block name="body"> <!-- 主体 -->
+<div id="indexMain" class="index-main">
+	<!-- 插件块 -->
+	<div class="container-span">{:hook('AdminIndex')}</div>
+</div>
 </block>
 
-<block name="script">
-<script type="text/javascript">
+<block name="script"> <script type="text/javascript">
     /* 插件块关闭操作 */
     $(".title-opt .wm-slide").each(function(){
         $(this).click(function(){
@@ -30,5 +30,4 @@
         $('.copyright').html('<div class="copyright"> ©2013-2014 上海顶想信息科技有限公司版权所有</div>');
         $('.sidebar').remove();
     })
-</script>
-</block>
+</script> </block>

@@ -8,67 +8,79 @@
 // +----------------------------------------------------------------------
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
-
 namespace Think\Db\Driver;
+
 use Think\Db\Driver;
 
 /**
  * Oracle数据库驱动
  */
-class Oracle extends Driver{
+class Oracle extends Driver
+{
 
-    private     $table        = '';
-    protected   $selectSql    = 'SELECT * FROM (SELECT thinkphp.*, rownum AS numrow FROM (SELECT  %DISTINCT% %FIELD% FROM %TABLE%%JOIN%%WHERE%%GROUP%%HAVING%%ORDER%) thinkphp ) %LIMIT%%COMMENT%';
+    private $table = '';
+
+    protected $selectSql = 'SELECT * FROM (SELECT thinkphp.*, rownum AS numrow FROM (SELECT  %DISTINCT% %FIELD% FROM %TABLE%%JOIN%%WHERE%%GROUP%%HAVING%%ORDER%) thinkphp ) %LIMIT%%COMMENT%';
 
     /**
      * 解析pdo连接的dsn信息
+     * 
      * @access public
-     * @param array $config 连接信息
+     * @param array $config
+     *            连接信息
      * @return string
      */
-    protected function parseDsn($config){
-        $dsn  =   'oci:dbname=//'.$config['hostname'].($config['hostport']?':'.$config['hostport']:'').'/'.$config['database'];
-        if(!empty($config['charset'])) {
-            $dsn  .= ';charset='.$config['charset'];
+    protected function parseDsn($config)
+    {
+        $dsn = 'oci:dbname=//' . $config['hostname'] . ($config['hostport'] ? ':' . $config['hostport'] : '') . '/' . $config['database'];
+        if (! empty($config['charset'])) {
+            $dsn .= ';charset=' . $config['charset'];
         }
         return $dsn;
     }
 
     /**
      * 执行语句
+     * 
      * @access public
-     * @param string $str  sql指令
+     * @param string $str
+     *            sql指令
      * @return integer
      */
-    public function execute($str,$bind=[]) {
+    public function execute($str, $bind = [])
+    {
         $this->initConnect(true);
-        if ( !$this->_linkID ) return false;
-        $this->queryStr = $str;
-        if(!empty($bind)){
-            $this->queryStr     .=   '[ '.print_r($bind,true).' ]';
-        }        
-        $flag = false;
-        if(preg_match("/^\s*(INSERT\s+INTO)\s+(\w+)\s+/i", $str, $match)) {
-            $this->table = C("DB_SEQUENCE_PREFIX").str_ireplace(C("DB_PREFIX"), "", $match[2]);
-            $flag = (boolean)$this->query("SELECT * FROM user_sequences WHERE sequence_name='" . strtoupper($this->table) . "'");
+        if (! $this->_linkID) {
+            return false;
         }
-        //释放前次的查询结果
-        if ( !empty($this->PDOStatement) ) $this->free();
-        $this->executeTimes++;
+        $this->queryStr = $str;
+        if (! empty($bind)) {
+            $this->queryStr .= '[ ' . print_r($bind, true) . ' ]';
+        }
+        $flag = false;
+        if (preg_match("/^\s*(INSERT\s+INTO)\s+(\w+)\s+/i", $str, $match)) {
+            $this->table = C("DB_SEQUENCE_PREFIX") . str_ireplace(C("DB_PREFIX"), "", $match[2]);
+            $flag = (boolean) $this->query("SELECT * FROM user_sequences WHERE sequence_name='" . strtoupper($this->table) . "'");
+        }
+        // 释放前次的查询结果
+        if (! empty($this->PDOStatement)) {
+            $this->free();
+        }
+        $this->executeTimes ++;
         // 记录开始执行时间
         $this->debug(true);
-        $this->PDOStatement	=	$this->_linkID->prepare($str);
-        if(false === $this->PDOStatement) {
+        $this->PDOStatement = $this->_linkID->prepare($str);
+        if (false === $this->PDOStatement) {
             E($this->error());
         }
-        $result	=	$this->PDOStatement->execute($bind);
+        $result = $this->PDOStatement->execute($bind);
         $this->debug(false);
-        if ( false === $result) {
+        if (false === $result) {
             $this->error();
             return false;
         } else {
             $this->numRows = $this->PDOStatement->rowCount();
-            if($flag || preg_match("/^\s*(INSERT\s+INTO|REPLACE\s+INTO)\s+/i", $str)) {
+            if ($flag || preg_match("/^\s*(INSERT\s+INTO|REPLACE\s+INTO)\s+/i", $str)) {
                 $this->lastInsID = $this->_linkID->lastInsertId();
             }
             return $this->numRows;
@@ -77,24 +89,23 @@ class Oracle extends Driver{
 
     /**
      * 取得数据表的字段信息
+     * 
      * @access public
      */
-     public function getFields($tableName) {
-        list($tableName) = explode(' ', $tableName);
-        $result = $this->query("select a.column_name,data_type,decode(nullable,'Y',0,1) notnull,data_default,decode(a.column_name,b.column_name,1,0) pk "
-                  ."from user_tab_columns a,(select column_name from user_constraints c,user_cons_columns col "
-          ."where c.constraint_name=col.constraint_name and c.constraint_type='P'and c.table_name='".strtoupper($tableName)
-          ."') b where table_name='".strtoupper($tableName)."' and a.column_name=b.column_name(+)");
-        $info   =   array();
-        if($result) {
+    public function getFields($tableName)
+    {
+        list ($tableName) = explode(' ', $tableName);
+        $result = $this->query("select a.column_name,data_type,decode(nullable,'Y',0,1) notnull,data_default,decode(a.column_name,b.column_name,1,0) pk " . "from user_tab_columns a,(select column_name from user_constraints c,user_cons_columns col " . "where c.constraint_name=col.constraint_name and c.constraint_type='P'and c.table_name='" . strtoupper($tableName) . "') b where table_name='" . strtoupper($tableName) . "' and a.column_name=b.column_name(+)");
+        $info = array();
+        if ($result) {
             foreach ($result as $key => $val) {
                 $info[strtolower($val['column_name'])] = array(
-                    'name'    => strtolower($val['column_name']),
-                    'type'    => strtolower($val['data_type']),
+                    'name' => strtolower($val['column_name']),
+                    'type' => strtolower($val['data_type']),
                     'notnull' => $val['notnull'],
                     'default' => $val['data_default'],
                     'primary' => $val['pk'],
-                    'autoinc' => $val['pk'],
+                    'autoinc' => $val['pk']
                 );
             }
         }
@@ -103,11 +114,13 @@ class Oracle extends Driver{
 
     /**
      * 取得数据库的表信息（暂时实现取得用户表信息）
+     * 
      * @access public
      */
-    public function getTables($dbName='') {
+    public function getTables($dbName = '')
+    {
         $result = $this->query("select table_name from user_tables");
-        $info   =   array();
+        $info = array();
         foreach ($result as $key => $val) {
             $info[$key] = current($val);
         }
@@ -116,38 +129,48 @@ class Oracle extends Driver{
 
     /**
      * SQL指令安全过滤
+     * 
      * @access public
-     * @param string $str  SQL指令
+     * @param string $str
+     *            SQL指令
      * @return string
      */
-    public function escapeString($str) {
+    public function escapeString($str)
+    {
         return str_ireplace("'", "''", $str);
     }
 
     /**
      * limit
+     * 
      * @access public
      * @return string
      */
-	public function parseLimit($limit) {
-        $limitStr    = '';
-        if(!empty($limit)) {
-            $limit	=	explode(',',$limit);
-            if(count($limit)>1)
-                $limitStr = "(numrow>" . $limit[0] . ") AND (numrow<=" . ($limit[0]+$limit[1]) . ")";
-            else
-                $limitStr = "(numrow>0 AND numrow<=".$limit[0].")";
+    public function parseLimit($limit)
+    {
+        $limitStr = '';
+        if (! empty($limit)) {
+            $limit = explode(',', $limit);
+            if (count($limit) > 1) {
+                $limitStr = "(numrow>" . $limit[0] . ") AND (numrow<=" . ($limit[0] + $limit[1]) . ")";
+            } else {
+                $limitStr = "(numrow>0 AND numrow<=" . $limit[0] . ")";
+            }
         }
-        return $limitStr?' WHERE '.$limitStr:'';
+        return $limitStr ? ' WHERE ' . $limitStr : '';
     }
 
     /**
      * 设置锁机制
+     * 
      * @access protected
      * @return string
      */
-    protected function parseLock($lock=false) {
-        if(!$lock) return '';
+    protected function parseLock($lock = false)
+    {
+        if (! $lock) {
+            return '';
+        }
         return ' FOR UPDATE NOWAIT ';
     }
 }

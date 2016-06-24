@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>后台管理</title>
-    <link rel="stylesheet" href="http://tools.wiicms.com/skins/css/uet.css">
-    <script src="http://tools.wiicms.com/skins/js/jquery.js"></script>
-    <script src="http://tools.wiicms.com/skins/js/jquery.pagination.js"></script>
-    <script src="http://tools.wiicms.com/skins/js/easytemplate.js"></script>
-    <script src="/leyao/Public/static/ueditor/dialogs/internal.js"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>后台管理</title>
+<link rel="stylesheet" href="http://tools.wiicms.com/skins/css/uet.css">
+<script src="http://tools.wiicms.com/skins/js/jquery.js"></script>
+<script src="http://tools.wiicms.com/skins/js/jquery.pagination.js"></script>
+<script src="http://tools.wiicms.com/skins/js/easytemplate.js"></script>
+<script src="/leyao/Public/static/ueditor/dialogs/internal.js"></script>
 </head>
 <body>
-<div id="tboxlist">
-    <div id="but_fresh">Fresh</div>
-    <ul id="listbox" class="uetbox">
-    </ul>
-    <div id="pagelist"></div>
-</div>
-<textarea name="template" id="template" cols="30" rows="10" style="display: none;">
+	<div id="tboxlist">
+		<div id="but_fresh">Fresh</div>
+		<ul id="listbox" class="uetbox">
+		</ul>
+		<div id="pagelist"></div>
+	</div>
+	<textarea name="template" id="template" cols="30" rows="10"
+		style="display: none;">
     <#list data as list>
         <li tid="${list.id}"><img src="${list.titlepic}">
-            <div style="display:none;" id="uet-${list.id}">${list.code}</div>
+            <div style="display: none;" id="uet-${list.id}">${list.code}</div>
         </li>
     </#list>
 </textarea>

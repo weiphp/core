@@ -1,10 +1,8 @@
 <?php
-include_once("WxPayHelper.php");
-
+include_once ("WxPayHelper.php");
 
 $commonUtil = new CommonUtil();
 $wxPayHelper = new WxPayHelper();
-
 
 $wxPayHelper->setParameter("bank_type", "WX");
 $wxPayHelper->setParameter("body", "test");
@@ -16,11 +14,9 @@ $wxPayHelper->setParameter("notify_url", "htttp://www.baidu.com");
 $wxPayHelper->setParameter("spbill_create_ip", "127.0.0.1");
 $wxPayHelper->setParameter("input_charset", "GBK");
 
-
 echo $wxPayHelper->create_app_package("test");
 echo "<br>";
 echo $wxPayHelper->create_biz_package();
 
 echo "<br>";
 echo $wxPayHelper->create_native_package();
-?>

@@ -1,18 +1,17 @@
-<include file="Public/mobile_head"/>	
-<link href="{:ADDON_PUBLIC_PATH}/leaflets.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+<include file="Public/mobile_head" />
+<link href="{:ADDON_PUBLIC_PATH}/leaflets.css?v={:SITE_VERSION}"
+	rel="stylesheet" type="text/css">
 <body id="leaflets">
 	<div class="container body">
-    	<h1>{$config.title}</h1>
-        <div class="qrcode">
-        	<img src="{$config.img}"/>
-        </div>
-        <div class="qr_tips">请使用微信扫描二维码关注此公众号</div>
-        <div class="desc">
-        	{$config.info}
-        </div>
-        <p class="copyright">{$config.copyright}</p>
-    </div>
-	
+		<h1>{$config.title}</h1>
+		<div class="qrcode">
+			<img src="{$config.img}" />
+		</div>
+		<div class="qr_tips">请使用微信扫描二维码关注此公众号</div>
+		<div class="desc">{$config.info}</div>
+		<p class="copyright">{$config.copyright}</p>
+	</div>
+
 </body>
 <script type="text/javascript">
 $('#shape').click(function(event){

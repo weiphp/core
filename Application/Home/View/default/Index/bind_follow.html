@@ -1,16 +1,22 @@
-<include file="Public/head" />	
+<include file="Public/head" />
 <style type="text/css">
-.qrcode{ padding:150px 0; text-align:center}
-.qrcode #canvas{ margin:10px auto;}
+.qrcode {
+	padding: 150px 0;
+	text-align: center
+}
+
+.qrcode #canvas {
+	margin: 10px auto;
+}
 </style>
 <script type="text/javascript" src="__STATIC__/qrcode/qrcode.js"></script>
 <script type="text/javascript" src="__STATIC__/qrcode/jquery.qrcode.js"></script>
-<body id="leaflets" style="background:#fff">
-	<div class="container body" style="background:#fff">
+<body id="leaflets" style="background: #fff">
+	<div class="container body" style="background: #fff">
 		<h1>{$config.title}</h1>
 		<div class="qrcode">
-        	<div id="canvas" style="height:250px; width:250px;"></div>
-            请使用微信扫描二维码进入预览
+			<div id="canvas" style="height: 250px; width: 250px;"></div>
+			请使用微信扫描二维码进入预览
 		</div>
 		<div class="desc">{$config.info}</div>
 		<p class="copyright">{$config.copyright}</p>

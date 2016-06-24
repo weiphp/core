@@ -5,7 +5,6 @@
  * Date: 14-04-09
  * Time: 上午10:17
  */
-
 include 'Qiniu_List.php';
 /* 判断类型 */
 switch ($_GET['action']) {
@@ -24,22 +23,21 @@ switch ($_GET['action']) {
 }
 $allowFiles = substr(str_replace(".", "|", join("", $allowFiles)), 1);
 
-//var_dump($allowFiles);
+// var_dump($allowFiles);
 /* 获取参数 */
 
 $size = isset($_GET['size']) ? htmlspecialchars($_GET['size']) : $listSize;
 $start = isset($_GET['start']) ? htmlspecialchars($_GET['start']) : 0;
 $end = $start + $size;
 
-//演示方法
+// 演示方法
 $Qiniu_List = Qiniu_List::getInstance();
-$Qiniu_List -> getUrl('','',1000);
+$Qiniu_List->getUrl('', '', 1000);
 
-$files = $Qiniu_List -> listFiles();
+$files = $Qiniu_List->listFiles();
 $marker = $files['marker'];
 
-
-if (!count($files['items'])) {
+if (! count($files['items'])) {
     return json_encode(array(
         "state" => "no match file",
         "list" => array(),
@@ -50,11 +48,12 @@ if (!count($files['items'])) {
 
 /* 获取指定范围的列表 */
 $len = count($files['items']);
-for ($i = min($end, $len) - 1, $list = array(); $i < $len && $i >= 0 && $i >= $start; $i--){
-    if ( preg_match( "/\.($allowFiles)$/i" , $files['items'][$i]['key'] ) ) {
-             $list[] = array("url"=>$HOST.$files['items'][$i]['key']);
-          }
-    
+for ($i = min($end, $len) - 1, $list = array(); $i < $len && $i >= 0 && $i >= $start; $i --) {
+    if (preg_match("/\.($allowFiles)$/i", $files['items'][$i]['key'])) {
+        $list[] = array(
+            "url" => $HOST . $files['items'][$i]['key']
+        );
+    }
 }
 
 /* 返回数据 */
@@ -66,4 +65,3 @@ $result = json_encode(array(
 ));
 
 return $result;
-

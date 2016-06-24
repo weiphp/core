@@ -31,13 +31,11 @@
 									<td width='250px'><img alt="{$vo[name]}"
 										src="{$vo[img]|get_cover_url}" width="100" height="100"></td>
 									<td width='250px'>{$vo[name]}</td>
-									<td width='250px'>
-										<eq name="vo.award_type" value="1">
-											<input type="text" value="{$vo.set_num|intval}" name="award_num[{$vo[id]}]">
-											<else />
-											<input type="text" value="{$vo.set_num|intval}" name="award_num[{$vo[id]}]" style="width: 50px;">%
-										</eq>
-									</td>
+									<td width='250px'><eq name="vo.award_type" value="1">
+										<input type="text" value="{$vo.set_num|intval}"
+											name="award_num[{$vo[id]}]"> <else /> <input
+											type="text" value="{$vo.set_num|intval}"
+											name="award_num[{$vo[id]}]" style="width: 50px;">% </eq></td>
 
 									<td width='250px'>{$vo.has_pay|intval}</td>
 

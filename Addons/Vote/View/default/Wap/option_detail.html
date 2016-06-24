@@ -1,43 +1,44 @@
-<include file="Public/mobile_head"/>
-<link rel="stylesheet" type="text/css" href="{:ADDON_PUBLIC_PATH}/shop_vote.css?v={:SITE_VERSION}">
+<include file="Public/mobile_head" />
+<link rel="stylesheet" type="text/css"
+	href="{:ADDON_PUBLIC_PATH}/shop_vote.css?v={:SITE_VERSION}">
 <body>
-    <div class="container">
-    	<div class="fixed_bg"></div>
-    	<div class="vote_wrap">
-        <div class="common_header">
-        	<a class="back" href="javascript:;" onClick="history.back()"></a>
-            <span>投票详情</span>
-        </div>
-      	<notempty name='option' >
-        	<div class="option_user">
-        		<img src="{$option.image|get_cover_url=300,300}">
-      			<p>姓名：{$option.number}号 {$option.truename}</p>
-      			<p>总票数:{$option.opt_count}</p>
-      			 <if condition='$overtime eq 1'>
-                    <span class="detail_btn over_btn"><em class="zan"></em>活动未开始</span>
-                <elseif condition='$overtime eq -1'/>  
-                	<span class="detail_btn over_btn"><em class="zan"></em>活动已结束</span>
-                <else/>                  
-                    <php> if($option[has_vote]==1) { </php>
-                    <a class='detail_btn has_vote'><em class="zan"></em>已投票</a>
-                    <php> }elseif($finish_vote==1) { </php>
-                    <a class='detail_btn over_btn'><em class="zan"></em>已投完</a>
-                    <php> }else { </php>
-                    <a class='detail_btn' onClick="vote_join({$option.id},{$vote_info.id},this);"><em class="zan"></em>投TA 一票</a>
-                    <php> } </php>                    
-                </if>
-      		</div>	
-            <div class="option_content">
-            	<h6><img src="{:ADDON_PUBLIC_PATH}/smile.png"/>微笑宣言</h6>
-                <p>{$option.manifesto}</p>
-            	<h6><img src="{:ADDON_PUBLIC_PATH}/remark.png"/>选手介绍</h6>
-                <p>{$option.introduce}</p>
-            </div>
-      	</notempty>
-        
-    </div>	
-   </div>
-<script type="text/javascript">
+	<div class="container">
+		<div class="fixed_bg"></div>
+		<div class="vote_wrap">
+			<div class="common_header">
+				<a class="back" href="javascript:;" onClick="history.back()"></a> <span>投票详情</span>
+			</div>
+			<notempty name='option'>
+			<div class="option_user">
+				<img src="{$option.image|get_cover_url=300,300}">
+				<p>姓名：{$option.number}号 {$option.truename}</p>
+				<p>总票数:{$option.opt_count}</p>
+				<if condition='$overtime eq 1'> <span
+					class="detail_btn over_btn"><em class="zan"></em>活动未开始</span> <elseif
+					condition='$overtime eq -1' /> <span class="detail_btn over_btn"><em
+					class="zan"></em>活动已结束</span> <else /> <php>
+				if($option[has_vote]==1) { </php> <a class='detail_btn has_vote'><em
+					class="zan"></em>已投票</a> <php> }elseif($finish_vote==1) { </php> <a
+					class='detail_btn over_btn'><em class="zan"></em>已投完</a> <php>
+				}else { </php> <a class='detail_btn'
+					onClick="vote_join({$option.id},{$vote_info.id},this);"><em
+					class="zan"></em>投TA 一票</a> <php> } </php> </if>
+			</div>
+			<div class="option_content">
+				<h6>
+					<img src="{:ADDON_PUBLIC_PATH}/smile.png" />微笑宣言
+				</h6>
+				<p>{$option.manifesto}</p>
+				<h6>
+					<img src="{:ADDON_PUBLIC_PATH}/remark.png" />选手介绍
+				</h6>
+				<p>{$option.introduce}</p>
+			</div>
+			</notempty>
+
+		</div>
+	</div>
+	<script type="text/javascript">
 var is_verify = '{$vote_info.is_verify}';
 function vote_join(optionid,voteid,_this){
 	if (optionid ==0) {
@@ -101,6 +102,6 @@ wx.ready(function(){
 	wx.onMenuShareQQ(shareData);
 	wx.onMenuShareWeibo(shareData);
 });
-</script>    
+</script>
 </body>
 </html>

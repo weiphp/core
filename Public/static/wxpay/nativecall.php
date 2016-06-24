@@ -1,6 +1,5 @@
 <?php
-include_once("WxPayHelper.php");
-
+include_once ("WxPayHelper.php");
 
 $commonUtil = new CommonUtil();
 $wxPayHelper = new WxPayHelper();
@@ -16,4 +15,3 @@ $wxPayHelper->setParameter("spbill_create_ip", "127.0.0.1");
 $wxPayHelper->setParameter("input_charset", "GBK");
 
 echo $wxPayHelper->create_native_package();
-?>

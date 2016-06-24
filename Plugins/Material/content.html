@@ -1,104 +1,153 @@
 <style>
-.image_material,.text_material,.voice_material,.video_material {
+.image_material, .text_material, .voice_material, .video_material {
 	display: block;
-    border: 1px dashed #ddd;
-    width: 308px;
-    height: auto;
-    background: #eee;
-    text-align: center;
-    color: #333;
-    display: block;
-    float: left;
-    position: relative;
-}
-.image_material .select_image,.voice_material .select_voice,.video_material .select_video,.text_material .select_text {
-    line-height: 196px;
-    display: block;
-    height: 200px;
-}
-#voice_area,#video_area,#image_area{
+	border: 1px dashed #ddd;
+	width: 308px;
+	height: auto;
+	background: #eee;
+	text-align: center;
+	color: #333;
+	display: block;
+	float: left;
 	position: relative;
 }
-#image_area .delete,#voice_area .delete,#video_area .delete,.text_material .delete {
-    position: absolute;
-    top: 1px;
-    white-space: nowrap;
-    display: none;
+
+.image_material .select_image, .voice_material .select_voice,
+	.video_material .select_video, .text_material .select_text {
+	line-height: 196px;
+	display: block;
+	height: 200px;
 }
+
+#voice_area, #video_area, #image_area {
+	position: relative;
+}
+
+#image_area .delete, #voice_area .delete, #video_area .delete,
+	.text_material .delete {
+	position: absolute;
+	top: 1px;
+	white-space: nowrap;
+	display: none;
+}
+
 .appmsg_item {
-    padding: 15px;
-    width: 278px;
+	padding: 15px;
+	width: 278px;
 }
+
 .appmsg_item .main_img {
-    height: auto;margin: 0;
+	height: auto;
+	margin: 0;
 }
-#image_area .image_wrap{border: 1px dashed #ddd;width: 308px;display: none;}    
-.video_wrap,.voice_wrap{background: #fff;}
-.voice_wrap{ width:308px;float:left}
-.video_wrap{ width:222px;}
-.select_video,.select_voice,.select_image{  height: 240px;line-height: 240px; cursor:pointer}
+
+#image_area .image_wrap {
+	border: 1px dashed #ddd;
+	width: 308px;
+	display: none;
+}
+
+.video_wrap, .voice_wrap {
+	background: #fff;
+}
+
+.voice_wrap {
+	width: 308px;
+	float: left
+}
+
+.video_wrap {
+	width: 222px;
+}
+
+.select_video, .select_voice, .select_image {
+	height: 240px;
+	line-height: 240px;
+	cursor: pointer
+}
 </style>
-<input type="hidden" value="{$default_value}" name="{$name}" id="material_res_{$name}" data-type='{$default_type}' data-id='{$default_id}' />
+<input type="hidden" value="{$default_value}" name="{$name}"
+	id="material_res_{$name}" data-type='{$default_type}'
+	data-id='{$default_id}' />
 <div class="form-item cf">
-  <div class="controls">
-    <div class="check-item">
-      <input type="radio" name="material_{$name}_type" id="material_{$name}_text" value="text" class="regular-radio" onClick="changeOption()">
-      <label for="material_{$name}_text"></label>文本
-      </div>
-     <div class="check-item">
-      <input type="radio" name="material_{$name}_type" id="material_{$name}_img" value="img" class="regular-radio" onClick="changeOption()">
-       <label for="material_{$name}_img"></label> 图片
-      </div>
-    <div class="check-item">
-      <input type="radio" name="material_{$name}_type" id="material_{$name}_news" value="news" class="regular-radio" onClick="changeOption()">
-      <label for="material_{$name}_news"></label>图文
-    </div>
-    <div class="check-item">
-      <input type="radio" name="material_{$name}_type" id="material_{$name}_voice" value="voice" class="regular-radio" onClick="changeOption()">
-      <label for="material_{$name}_voice"></label>语音
-    </div>
-    <div class="check-item">
-      <input type="radio" name="material_{$name}_type" id="material_{$name}_video" value="video" class="regular-radio" onClick="changeOption()">
-      <label for="material_{$name}_video"></label>视频
-    </div>
-  </div>
-</div>
-<div class="form-item cf show showtext text_area" id="text_area" style="margin:20px 0;">
-<input type="hidden" name="material_{$name}_text_id" value="{$text_id}"/>
-	<div class='text_material' id='text_material'>
-      <a class="select_text" href="javascript:;" onClick="$.WeiPHP.openSelectAppText('{:U('/Home/Material/text_lists')}',selectTextCallback)">选择文本</a>
-      <div class="text_wrap" style="height:auto;"></div>
-      <a class="delete" href="javascript:;" style="left: 310px;">删除</a>
+	<div class="controls">
+		<div class="check-item">
+			<input type="radio" name="material_{$name}_type"
+				id="material_{$name}_text" value="text" class="regular-radio"
+				onClick="changeOption()"> <label for="material_{$name}_text"></label>文本
+		</div>
+		<div class="check-item">
+			<input type="radio" name="material_{$name}_type"
+				id="material_{$name}_img" value="img" class="regular-radio"
+				onClick="changeOption()"> <label for="material_{$name}_img"></label>
+			图片
+		</div>
+		<div class="check-item">
+			<input type="radio" name="material_{$name}_type"
+				id="material_{$name}_news" value="news" class="regular-radio"
+				onClick="changeOption()"> <label for="material_{$name}_news"></label>图文
+		</div>
+		<div class="check-item">
+			<input type="radio" name="material_{$name}_type"
+				id="material_{$name}_voice" value="voice" class="regular-radio"
+				onClick="changeOption()"> <label
+				for="material_{$name}_voice"></label>语音
+		</div>
+		<div class="check-item">
+			<input type="radio" name="material_{$name}_type"
+				id="material_{$name}_video" value="video" class="regular-radio"
+				onClick="changeOption()"> <label
+				for="material_{$name}_video"></label>视频
+		</div>
 	</div>
 </div>
-<div  class="form-item cf show shownews appmsg_area" id="appmsg_area" style="margin:20px 0;">
-<input type="hidden" name="material_{$name}_news_id" value="{$news_id}"/>
-      <a class="select_appmsg" href="javascript:;" onClick="$.WeiPHP.openSelectAppMsg('{:U('/Home/Material/material_data')}',selectAppMsgCallback)">选择图文</a>
-      <div class="appmsg_wrap" style="height:auto;"></div>
-      <a class="delete" href="javascript:;" style="left: 310px;">删除</a>
+<div class="form-item cf show showtext text_area" id="text_area"
+	style="margin: 20px 0;">
+	<input type="hidden" name="material_{$name}_text_id" value="{$text_id}" />
+	<div class='text_material' id='text_material'>
+		<a class="select_text" href="javascript:;"
+			onClick="$.WeiPHP.openSelectAppText('{:U('/Home/Material/text_lists')}',selectTextCallback)">选择文本</a>
+		<div class="text_wrap" style="height: auto;"></div>
+		<a class="delete" href="javascript:;" style="left: 310px;">删除</a>
+	</div>
+</div>
+<div class="form-item cf show shownews appmsg_area" id="appmsg_area"
+	style="margin: 20px 0;">
+	<input type="hidden" name="material_{$name}_news_id" value="{$news_id}" />
+	<a class="select_appmsg" href="javascript:;"
+		onClick="$.WeiPHP.openSelectAppMsg('{:U('/Home/Material/material_data')}',selectAppMsgCallback)">选择图文</a>
+	<div class="appmsg_wrap" style="height: auto;"></div>
+	<a class="delete" href="javascript:;" style="left: 310px;">删除</a>
 </div>
 
-<div class="form-item cf show showimg image_area" id="image_area" style="margin:20px 0;">
-<input type="hidden" name="material_{$name}_img_id" value="{$img_id}"/>
- 
-        <a class="select_image image_material" href="javascript:;"  onClick="$.WeiPHP.openSelectAppMsg('{:U('/Home/Material/picture_data')}',selectImageCallback)">从素材库选择图片</a>
-        <div class="image_wrap"></div>
-        <a class="delete" href="javascript:;" style="left: 310px; ">删除</a>
+<div class="form-item cf show showimg image_area" id="image_area"
+	style="margin: 20px 0;">
+	<input type="hidden" name="material_{$name}_img_id" value="{$img_id}" />
+
+	<a class="select_image image_material" href="javascript:;"
+		onClick="$.WeiPHP.openSelectAppMsg('{:U('/Home/Material/picture_data')}',selectImageCallback)">从素材库选择图片</a>
+	<div class="image_wrap"></div>
+	<a class="delete" href="javascript:;" style="left: 310px;">删除</a>
 
 </div>
-<div class="form-item cf show showvoice voice_area" id="voice_area" style="margin:20px 0;">
-<input type="hidden" name="material_{$name}_voice_id" value="{$voice_id}"/>
-     <a class="voice_material select_voice" href="javascript:;" onClick="$.WeiPHP.openSelectAppMsg('{:U('/Home/Material/voice_data')}',selectVoiceCallback,'选择语音素材')">选择语音素材</a>
-     <div class="voice_wrap"></div>
-     <a class="delete" href="javascript:;" >删除</a>
+<div class="form-item cf show showvoice voice_area" id="voice_area"
+	style="margin: 20px 0;">
+	<input type="hidden" name="material_{$name}_voice_id"
+		value="{$voice_id}" /> <a class="voice_material select_voice"
+		href="javascript:;"
+		onClick="$.WeiPHP.openSelectAppMsg('{:U('/Home/Material/voice_data')}',selectVoiceCallback,'选择语音素材')">选择语音素材</a>
+	<div class="voice_wrap"></div>
+	<a class="delete" href="javascript:;">删除</a>
 </div>
-<div class="form-item cf show showvideo video_area" id="video_area" style="margin:20px 0;">
-<input type="hidden" name="material_{$name}_video_id" value="{$video_id}"/>
+<div class="form-item cf show showvideo video_area" id="video_area"
+	style="margin: 20px 0;">
+	<input type="hidden" name="material_{$name}_video_id"
+		value="{$video_id}" /> <a class="voice_material select_video"
+		href="javascript:;"
+		onClick="$.WeiPHP.openSelectAppMsg('{:U('/Home/Material/video_data')}',selectVideoCallback,'选择视频素材')">选择视频素材</a>
 
-     <a class="voice_material select_video" href="javascript:;" onClick="$.WeiPHP.openSelectAppMsg('{:U('/Home/Material/video_data')}',selectVideoCallback,'选择视频素材')">选择视频素材</a>
-
-     <div class="video_wrap" style="float: left;"></div>
-     <a class="delete" href="javascript:;" style="left: 230px;">删除</a>
+	<div class="video_wrap" style="float: left;"></div>
+	<a class="delete" href="javascript:;" style="left: 230px;">删除</a>
 </div>
 
 <script type="text/javascript">

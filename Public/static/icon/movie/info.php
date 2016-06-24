@@ -1,5 +1,5 @@
 <?php
-return array (
-		'cate' => '电影',
-		'author' => 'easyicon'
-);					
+return array(
+    'cate' => '电影',
+    'author' => 'easyicon'
+);

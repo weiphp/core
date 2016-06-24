@@ -1,16 +1,15 @@
 <extend name="Public/base" />
 
-<block name="body">
-	<!-- 标题栏 -->
-	<div class="main-title">
-		<h2>图文样式分组管理</h2>
+<block name="body"> <!-- 标题栏 -->
+<div class="main-title">
+	<h2>图文样式分组管理</h2>
+</div>
+<div class="cf">
+	<div class="fl">
+		<a class="btn" href="{:U('groupAdd')}">新 增</a>
 	</div>
-	<div class="cf">
-		<div class="fl">
-            <a class="btn" href="{:U('groupAdd')}">新 增</a>
-        </div>
 
-        <!-- 高级搜索
+	<!-- 高级搜索
 		<div class="search-form fr cf">
 			<div class="sleft">
 				<input type="text" name="nickname" class="search-input" value="{:I('nickname')}" placeholder="请输入用户昵称或者ID">
@@ -18,46 +17,44 @@
 			</div>
 		</div>
          -->
-    </div>
-    <!-- 数据列表 -->
-    <div class="data-table table-striped">
+</div>
+<!-- 数据列表 -->
+<div class="data-table table-striped">
 	<table class="">
-    <thead>
-        <tr>
-		<th class="row-selected row-selected"><input class="check-all" type="checkbox"/></th>
-		<th class="">分组</th>
-        <th class="">描述</th>
-		<th class="">操作</th>
-		</tr>
-    </thead>
-    <tbody>
-		<notempty name="_list['list_data']">
-		<volist name="_list.list_data" id="vo">
-		<tr>
-            <td><input class="ids" type="checkbox" name="id[]" value="{$vo.uid}" /></td>
-			<td>{$vo.group_name}</td>
-            <td>{$vo.desc}</td>
-			<td>
-            	<a href="{:U('ArticleStyle/groupEdit?id='.$vo['id'])}">编辑</a>
-				<a href="{:U('ArticleStyle/groupDel?id='.$vo['id'])}" class="confirm ajax-get">删除</a>
-                </td>
-		</tr>
-		</volist>
-		<else/>
-		<td colspan="4" class="text-center"> aOh! 暂时还没有内容! </td>
-		</notempty>
-	</tbody>
-    </table> 
-	</div>
-    <div class="page">
-        {$_list._page}
-    </div>
+		<thead>
+			<tr>
+				<th class="row-selected row-selected"><input class="check-all"
+					type="checkbox" /></th>
+				<th class="">分组</th>
+				<th class="">描述</th>
+				<th class="">操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			<notempty name="_list['list_data']"> <volist
+				name="_list.list_data" id="vo">
+			<tr>
+				<td><input class="ids" type="checkbox" name="id[]"
+					value="{$vo.uid}" /></td>
+				<td>{$vo.group_name}</td>
+				<td>{$vo.desc}</td>
+				<td><a href="{:U('ArticleStyle/groupEdit?id='.$vo['id'])}">编辑</a>
+					<a href="{:U('ArticleStyle/groupDel?id='.$vo['id'])}"
+					class="confirm ajax-get">删除</a></td>
+			</tr>
+			</volist> <else />
+			<td colspan="4" class="text-center">aOh! 暂时还没有内容!</td>
+			</notempty>
+		</tbody>
+	</table>
+</div>
+<div class="page">{$_list._page}</div>
 </block>
 
-<block name="script">
-	<script src="__STATIC__/thinkbox/jquery.thinkbox.js?v={:SITE_VERSION}"></script>
+<block name="script"> <script
+	src="__STATIC__/thinkbox/jquery.thinkbox.js?v={:SITE_VERSION}"></script>
 
-	<script type="text/javascript">
+<script type="text/javascript">
 	//搜索功能
 	$("#search").click(function(){
 		var url = $(this).attr('url');
@@ -80,5 +77,4 @@
 	});
     //导航高亮
     highlight_subnav('{:U('User/index')}');
-	</script>
-</block>
+	</script> </block>

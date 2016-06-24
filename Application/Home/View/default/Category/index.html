@@ -1,30 +1,28 @@
-<extend name="Base/common"/>
+<extend name="Base/common" />
 
 <block name="body">
-	<div class="main-title">
-		<h2>分类管理</h2>
-	</div>
+<div class="main-title">
+	<h2>分类管理</h2>
+</div>
 
-	<!-- 表格列表 -->
-	<div class="tb-unit posr">
-		<div class="tb-unit-bar">
-			<a class="btn" href="{:U('add')}">新 增</a>
-		</div>
-		<div class="category">
-			<div class="hd cf">
-				<div class="fold">折叠</div>
-				<div class="order">排序</div>
-				<!--<div class="order">发布</div>-->
-				<div class="name">名称</div>
-			</div>
-			{:R('Category/tree', array($tree))}
-		</div>
+<!-- 表格列表 -->
+<div class="tb-unit posr">
+	<div class="tb-unit-bar">
+		<a class="btn" href="{:U('add')}">新 增</a>
 	</div>
-	<!-- /表格列表 -->
-</block>
+	<div class="category">
+		<div class="hd cf">
+			<div class="fold">折叠</div>
+			<div class="order">排序</div>
+			<!--<div class="order">发布</div>-->
+			<div class="name">名称</div>
+		</div>
+		{:R('Category/tree', array($tree))}
+	</div>
+</div>
+<!-- /表格列表 --> </block>
 
-<block name="script">
-	<script type="text/javascript">
+<block name="script"> <script type="text/javascript">
 		(function($){
 			/* 分类展开收起 */
 			$(".category dd").prev().find(".fold i").addClass("icon-unfold")
@@ -78,5 +76,4 @@
                     }
                 });
 		})(jQuery);
-	</script>
-</block>
+	</script> </block>

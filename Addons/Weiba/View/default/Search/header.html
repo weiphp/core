@@ -1,12 +1,15 @@
-<include file="Public/mobile_head"/>
+<include file="Public/mobile_head" />
 
-    <link href="{:ADDON_PUBLIC_PATH}/css.min.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css" />
+<link href="{:ADDON_PUBLIC_PATH}/css.min.css?v={:SITE_VERSION}"
+	rel="stylesheet" type="text/css" />
 
-    <link href="{:ADDON_PUBLIC_PATH}/style.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css" />
-	<link rel="stylesheet" href="{:ADDON_PUBLIC_PATH}/swiper/dist/idangerous.swiper.css">
+<link href="{:ADDON_PUBLIC_PATH}/style.css?v={:SITE_VERSION}"
+	rel="stylesheet" type="text/css" />
+<link rel="stylesheet"
+	href="{:ADDON_PUBLIC_PATH}/swiper/dist/idangerous.swiper.css">
 
-    <!--TS-U function-->
-    <script type="text/javascript">
+<!--TS-U function-->
+<script type="text/javascript">
         var SITE_URL  = '<php> echo SITE_URL;</php>';
         //载入函数
         var U = function(url, params) {
@@ -27,7 +30,8 @@
         };
         var _static = '__APP__';
     </script>
-    <script type="text/javascript" src="{:ADDON_PUBLIC_PATH}/js.min.js?v={:SITE_VERSION}"></script>
+<script type="text/javascript"
+	src="{:ADDON_PUBLIC_PATH}/js.min.js?v={:SITE_VERSION}"></script>
 <script>
 /**
  * 全局变量
@@ -47,9 +51,8 @@ var USER_UN_SETTING = '{$unsetting}';
 var LANG = new Array();
 </script>
 <php>if(!empty($langJsList)) {</php>
-<volist name="langJsList" id="vo">
-<script src="{$vo}?v={:SITE_VERSION}"></script>
-</volist>
+<volist name="langJsList" id="vo"> <script
+	src="{$vo}?v={:SITE_VERSION}"></script> </volist>
 <php>}</php>
 <!--
 <script src="__THEME__/js/js.php?t=js&f=3"></script>
@@ -58,12 +61,9 @@ var LANG = new Array();
 <script src="{:ADDON_PUBLIC_PATH}/swiper/dist/idangerous.swiper.min.js"></script>
 
 <body>
-<div id="header">
-    <div id="header-buttons">
-    </div>
-    <h1>
-        
-    </h1>
-</div>
-<div id="layout">
-    <div id="main">
+	<div id="header">
+		<div id="header-buttons"></div>
+		<h1></h1>
+	</div>
+	<div id="layout">
+		<div id="main">

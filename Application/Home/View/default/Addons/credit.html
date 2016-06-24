@@ -1,21 +1,21 @@
-<include file="Public/mobile_head"/>	
+<include file="Public/mobile_head" />
 <body>
-  <div id="container" class="container body" style="background:#f2f2f2 none">
-    	<div class="checking">
-        	<div class="rotate rotating"></div>
-        </div>
-        <p class="check_text">正在检查你的金币值和经历值···</p>
-        <div id="btnGroup" style="margin-top:20px;display:none">
-            <div class="m_15">
-                <a href="#" class="btn yellow_btn mb_15">参与互动</a>
-             </div>
-             <div class="m_15">
-                <a href="#" class="btn">购买经历值</a>
-            </div>
-        </div>
-  </div>
- <block name="script">
- 	<script type="text/javascript">
+	<div id="container" class="container body"
+		style="background: #f2f2f2 none">
+		<div class="checking">
+			<div class="rotate rotating"></div>
+		</div>
+		<p class="check_text">正在检查你的金币值和经历值···</p>
+		<div id="btnGroup" style="margin-top: 20px; display: none">
+			<div class="m_15">
+				<a href="#" class="btn yellow_btn mb_15">参与互动</a>
+			</div>
+			<div class="m_15">
+				<a href="#" class="btn">购买经历值</a>
+			</div>
+		</div>
+	</div>
+	<block name="script"> <script type="text/javascript">
 	var flag = 0; //0不足  1足够
 	setTimeout(function(){
 		$('.rotate').removeClass('rotating');
@@ -33,7 +33,6 @@
 	抽完奖“是否弹框”
  	$.Dialog.confirmBox('温馨提示','中奖记录中奖记录中奖记录中奖记录中奖记录',{'rightCallback':function(){//回调}});"
 	*/
-	</script>
- </block>
+	</script> </block>
 </body>
 </html>

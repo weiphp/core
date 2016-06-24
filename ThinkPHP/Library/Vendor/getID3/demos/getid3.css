@@ -1,38 +1,37 @@
 /**
 * Common elements
 */
-
 body {
 	font: 12px Verdana, sans-serif;
 	background-color: white;
-	color:            black;
-	margin-top:    6px;
+	color: black;
+	margin-top: 6px;
 	margin-bottom: 30px;
-	margin-left:   12px;
-	margin-right:  12px;
+	margin-left: 12px;
+	margin-right: 12px;
 }
 
 h1 {
 	font: bold 18px Verdana, sans-serif;
-	line-height:   26px;
-	margin-top:    12px;
+	line-height: 26px;
+	margin-top: 12px;
 	margin-bottom: 15px;
-	margin-left:    0px;
-	margin-right:   7px;
+	margin-left: 0px;
+	margin-right: 7px;
 	background-color: #e6eaf6;
-	padding-left:   10px;
-	padding-top:    2px;
+	padding-left: 10px;
+	padding-top: 2px;
 	padding-bottom: 4px;
 }
 
 h3 {
 	font: bold 13px Verdana, sans-serif;
-	line-height:   26px;
-	margin-top:    12px;
-	margin-bottom:  0px;
-	margin-left:    0px;
-	margin-right:   7px;
-	padding-left:   4px;
+	line-height: 26px;
+	margin-top: 12px;
+	margin-bottom: 0px;
+	margin-left: 0px;
+	margin-right: 7px;
+	padding-left: 4px;
 }
 
 ul {
@@ -41,7 +40,7 @@ ul {
 
 p, li {
 	font: 9pt/135% sans-serif;
-	margin-top:    1x;
+	margin-top: 1x;
 	margin-bottom: 0x;
 }
 
@@ -58,15 +57,15 @@ hr {
 
 table.table td {
 	font: 9pt sans-serif;
-	padding-top:    1px;
+	padding-top: 1px;
 	padding-bottom: 1px;
-	padding-left:   5px;
-	padding-right:  5px;
+	padding-left: 5px;
+	padding-right: 5px;
 }
 
 table.table td.header {
 	background-color: #cccccc;
-	padding-top:    2px;
+	padding-top: 2px;
 	padding-bottom: 2px;
 	font-weight: bold;
 }
@@ -80,25 +79,25 @@ table.table tr.odd_files {
 }
 
 table.dump {
-	border-top:  solid 1px #cccccc;
+	border-top: solid 1px #cccccc;
 	border-left: solid 1px #cccccc;
 	margin: 2px;
 }
 
 table.dump td {
 	font: 9pt sans-serif;
-	padding-top:    1px;
+	padding-top: 1px;
 	padding-bottom: 1px;
-	padding-left:   5px;
-	padding-right:  5px;
-	border-right:  solid 1px #cccccc;
+	padding-left: 5px;
+	padding-right: 5px;
+	border-right: solid 1px #cccccc;
 	border-bottom: solid 1px #cccccc;
 }
 
 td.dump_string {
 	font-weight: bold;
 	color: #006600;
-	font-family: Zawgyi-One,sans-serif;
+	font-family: Zawgyi-One, sans-serif;
 }
 
 td.dump_integer {
@@ -120,38 +119,34 @@ td.dump_boolean {
 	color: red
 }
 
-
 /**
 * Tool Tips
 */
-
 .tooltip {
-    font: 9pt sans-serif;
-    background: #ffffe1;
-    color: 	black;
-    border: 	black 1px solid;
-    margin: 	2px;
-    padding: 	7px;
-    position: 	absolute;
-    top: 	10px;
-    left: 	10px;
-    z-index: 	10000;
-    visibility: hidden;
+	font: 9pt sans-serif;
+	background: #ffffe1;
+	color: black;
+	border: black 1px solid;
+	margin: 2px;
+	padding: 7px;
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	z-index: 10000;
+	visibility: hidden;
 }
 
 .tooltip p {
-     margin-top:   -2px;
-     margin-bottom: 4px;
+	margin-top: -2px;
+	margin-bottom: 4px;
 }
-
 
 /**
 * Forms
 */
-
 table.form td {
- 	font: 9pt/135% sans-serif;
- 	padding: 2px;
+	font: 9pt/135% sans-serif;
+	padding: 2px;
 }
 
 select, input {

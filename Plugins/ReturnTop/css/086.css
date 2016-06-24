@@ -1,1 +1,5 @@
-#topcontrol a.top_stick{ width:28px; height:29px; background:url(../images/086.gif);}
+#topcontrol a.top_stick {
+	width: 28px;
+	height: 29px;
+	background: url(../images/086.gif);
+}

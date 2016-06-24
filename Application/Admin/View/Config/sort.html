@@ -1,44 +1,45 @@
 <extend name="Public/base" />
 
 <block name="body">
-	<div class="main-title cf">
-		<h2>
-			配置排序 [ <a href="{$Think.cookie.__forward__}">返回列表</a> ]
-		</h2>
-	</div>
-	<div class="sort">
-		<form action="{:U('sort')}" method="post">
-			<!-- <div class="sort_top">
+<div class="main-title cf">
+	<h2>
+		配置排序 [ <a href="{$Think.cookie.__forward__}">返回列表</a> ]
+	</h2>
+</div>
+<div class="sort">
+	<form action="{:U('sort')}" method="post">
+		<!-- <div class="sort_top">
 				查找：<input type="text"><button class="btn search" type="button">查 找</button>
 			</div> -->
-            
-			<div class="sort_center">
-                
-				<div class="sort_option">
-					<select value="" size="8">
-						<volist name="list" id="vo">
-							<option class="ids" title="{$vo.title}" value="{$vo.id}">{$vo.title}</option>
-						</volist>
-					</select>
-				</div>
-				<div class="sort_btn">
-					<button class="top btn" type="button">第 一</button>
-					<button class="up btn" type="button">上 移</button>
-					<button class="down btn" type="button">下 移</button>
-					<button class="bottom btn" type="button">最 后</button>
-				</div>
+
+		<div class="sort_center">
+
+			<div class="sort_option">
+				<select value="" size="8">
+					<volist name="list" id="vo">
+					<option class="ids" title="{$vo.title}" value="{$vo.id}">{$vo.title}</option>
+					</volist>
+				</select>
 			</div>
-			<div class="sort_bottom">
-				<input type="hidden" name="ids">
-				<button class="sort_confirm btn submit-btn" type="button">确 定</button>
-				<button class="sort_cancel btn btn-return" type="button" url="{$Think.cookie.__forward__}">返 回</button>
+			<div class="sort_btn">
+				<button class="top btn" type="button">第 一</button>
+				<button class="up btn" type="button">上 移</button>
+				<button class="down btn" type="button">下 移</button>
+				<button class="bottom btn" type="button">最 后</button>
 			</div>
-		</form>
-	</div>
+		</div>
+		<div class="sort_bottom">
+			<input type="hidden" name="ids">
+			<button class="sort_confirm btn submit-btn" type="button">确
+				定</button>
+			<button class="sort_cancel btn btn-return" type="button"
+				url="{$Think.cookie.__forward__}">返 回</button>
+		</div>
+	</form>
+</div>
 </block>
 
-<block name="script">
-	<script type="text/javascript">
+<block name="script"> <script type="text/javascript">
 		$(function(){
 			sort();
 			$(".top").click(function(){
@@ -109,5 +110,4 @@
 				window.location.href = $(this).attr('url');
 			});
 		})
-	</script>
-</block>
+	</script> </block>

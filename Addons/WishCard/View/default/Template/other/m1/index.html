@@ -1,21 +1,18 @@
-<include file="Public/mobile_head"/>	
-<link href="{$assetsPath}/css.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+<include file="Public/mobile_head" />
+<link href="{$assetsPath}/css.css?v={:SITE_VERSION}" rel="stylesheet"
+	type="text/css">
 <body>
-<div class="container">
-	<div class="wish">
-    	<p class="receive">{$data.receive_name}:</p>
-        <p class="content">
-        	{$data.content}
-        </p>
-        <p class="send">——来自{$data.send_name}</p>
-    </div>
-    <if condition="$isMake eq 0">
-    	<a class="btn" href="{$makeUrl}">我也要制作</a>
-    <else/>
-    	<a class="btn" href="javascript:;" onClick="$.WeiPHP.showShareTips();">发送给朋友</a>
-    </if>
-    <p class="copyright">{$system_copy_right}{$tongji_code}</p>
-</div>
+	<div class="container">
+		<div class="wish">
+			<p class="receive">{$data.receive_name}:</p>
+			<p class="content">{$data.content}</p>
+			<p class="send">——来自{$data.send_name}</p>
+		</div>
+		<if condition="$isMake eq 0"> <a class="btn" href="{$makeUrl}">我也要制作</a>
+		<else /> <a class="btn" href="javascript:;"
+			onClick="$.WeiPHP.showShareTips();">发送给朋友</a> </if>
+		<p class="copyright">{$system_copy_right}{$tongji_code}</p>
+	</div>
 </body>
 <script type="text/javascript">
 $('.container').css('min-height',$(window).height());

@@ -1,109 +1,111 @@
 <!doctype html>
-<html style="overflow:hidden;>
-<head>
-    <meta charset="UTF-8">
-    <title>{$meta_title}|WeiPHP管理平台</title>
-    <link href="__ROOT__/Public/favicon.ico" type="image/x-icon" rel="shortcut icon">
-    <link rel="stylesheet" type="text/css" href="__CSS__/base.css?v={:SITE_VERSION}" media="all">
-    <link rel="stylesheet" type="text/css" href="__CSS__/common.css?v={:SITE_VERSION}" media="all">
-    <link rel="stylesheet" type="text/css" href="__CSS__/module.css?v={:SITE_VERSION}" />
-    <link rel="stylesheet" type="text/css" href="__CSS__/style.css?v={:SITE_VERSION}" media="all">
-    <link rel="stylesheet" type="text/css" href="__CSS__/store.css?v={:SITE_VERSION}" media="all">
-	<link rel="stylesheet" type="text/css" href="__CSS__/{$Think.config.COLOR_STYLE}.css?v={:SITE_VERSION}" media="all">
-     <!--[if lt IE 9]>
+<html style="overflow: hidden;&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8">
+<title>{$meta_title}|WeiPHP管理平台</title>
+<link href="__ROOT__/Public/favicon.ico" type="image/x-icon"
+	rel="shortcut icon">
+<link rel="stylesheet" type="text/css"
+	href="__CSS__/base.css?v={:SITE_VERSION}" media="all">
+<link rel="stylesheet" type="text/css"
+	href="__CSS__/common.css?v={:SITE_VERSION}" media="all">
+<link rel="stylesheet" type="text/css"
+	href="__CSS__/module.css?v={:SITE_VERSION}" />
+<link rel="stylesheet" type="text/css"
+	href="__CSS__/style.css?v={:SITE_VERSION}" media="all">
+<link rel="stylesheet" type="text/css"
+	href="__CSS__/store.css?v={:SITE_VERSION}" media="all">
+<link rel="stylesheet" type="text/css"
+	href="__CSS__/{$Think.config.COLOR_STYLE}.css?v={:SITE_VERSION}"
+	media="all">
+<!--[if lt IE 9]>
     <script type="text/javascript" src="__STATIC__/jquery-1.10.2.min.js"></script>
-    <![endif]--><!--[if gte IE 9]><!-->
-    <script type="text/javascript" src="__STATIC__/jquery-2.0.3.min.js"></script>
-    <script type="text/javascript" src="__JS__/jquery.mousewheel.js?v={:SITE_VERSION}"></script>
-    <!--<![endif]-->
-    <block name="style"></block>
+    <![endif]-->
+<!--[if gte IE 9]><!-->
+<script type="text/javascript" src="__STATIC__/jquery-2.0.3.min.js"></script>
+<script type="text/javascript"
+	src="__JS__/jquery.mousewheel.js?v={:SITE_VERSION}"></script>
+<!--<![endif]-->
+<block name="style"></block>
 </head>
-<body style="overflow:hidden;">
-    <!-- 头部 -->
-    <div class="header">
-        <!-- Logo -->
-        <span class="logo"></span>
-        <!-- /Logo -->
+<body style="overflow: hidden;">
+	<!-- 头部 -->
+	<div class="header">
+		<!-- Logo -->
+		<span class="logo"></span>
+		<!-- /Logo -->
 
-        <!-- 主导航 -->
-        <ul class="main-nav">
-            <volist name="__MENU__.main" id="menu">
-                <li class="{$menu.class|default=''}"><a href="{$menu.url|U}">{$menu.title}</a></li>
-            </volist>
-        </ul>
-        <!-- /主导航 -->
+		<!-- 主导航 -->
+		<ul class="main-nav">
+			<volist name="__MENU__.main" id="menu">
+			<li class="{$menu.class|default=''}"><a href="{$menu.url|U}">{$menu.title}</a></li>
+			</volist>
+		</ul>
+		<!-- /主导航 -->
 
-        <!-- 用户栏 -->
-        <div class="user-bar">
-            <a href="javascript:;" class="user-entrance"><i class="icon-user"></i></a>
-            <ul class="nav-list user-menu hidden">
-                <li class="manager">你好，<em title="{:session('user_auth.username')}">{:session('user_auth.username')}</em></li>
-                <li><a href="{:U('Home/Index/main')}">返回前台</a></li>
-                <li><a href="{:U('User/updatePassword')}">修改密码</a></li>
-                <li><a href="{:U('User/updateNickname')}">修改昵称</a></li>
-                <li><a href="{:U('Public/logout')}">退出</a></li>
-            </ul>
-        </div>
-    </div>
-    <!-- /头部 -->
+		<!-- 用户栏 -->
+		<div class="user-bar">
+			<a href="javascript:;" class="user-entrance"><i class="icon-user"></i></a>
+			<ul class="nav-list user-menu hidden">
+				<li class="manager">你好，<em
+					title="{:session('user_auth.username')}">{:session('user_auth.username')}</em></li>
+				<li><a href="{:U('Home/Index/main')}">返回前台</a></li>
+				<li><a href="{:U('User/updatePassword')}">修改密码</a></li>
+				<li><a href="{:U('User/updateNickname')}">修改昵称</a></li>
+				<li><a href="{:U('Public/logout')}">退出</a></li>
+			</ul>
+		</div>
+	</div>
+	<!-- /头部 -->
 
-    <!-- 边栏 -->
-    <div class="sidebar">
-        <!-- 子导航 -->
-        <block name="sidebar">
-            <div id="subnav" class="subnav">
-                <notempty name="_extra_menu">
-                    {// 动态扩展菜单 //}
-                    {:extra_menu($_extra_menu,$__MENU__)}
-                </notempty>
-                <volist name="__MENU__.child" id="sub_menu">
-                    <!-- 子导航 -->
-                    <notempty name="sub_menu">
-                        <notempty name="key"><h3><i class="icon icon-unfold"></i>{$key}</h3></notempty>
-                        <if condition="($key eq '开发者')" >
-                            <ul class="side-sub-menu">
-                                <volist name="sub_menu" id="menu">
-                                    <li>
-                                        <a class="item" href="{:REMOTE_BASE_URL}{$menu.url}" target="_blank">{$menu.title}</a>
-                                    </li>
-                                </volist>
-                            </ul>
-                         <else />
-                         	<ul class="side-sub-menu">
-                                <volist name="sub_menu" id="menu">
-                                    <li>
-                                        <a class="item" href="{$menu.url|U}">{$menu.title}</a>
-                                    </li>
-                                </volist>
-                            </ul>
-                          </if>
-                    </notempty>
-                    <!-- /子导航 -->
-                </volist>
-            </div>
-        </block>
-        <!-- /子导航 -->
-    </div>
-    <!-- /边栏 -->
+	<!-- 边栏 -->
+	<div class="sidebar">
+		<!-- 子导航 -->
+		<block name="sidebar">
+		<div id="subnav" class="subnav">
+			<notempty name="_extra_menu"> {// 动态扩展菜单 //}
+			{:extra_menu($_extra_menu,$__MENU__)} </notempty>
+			<volist name="__MENU__.child" id="sub_menu"> <!-- 子导航 --> <notempty
+				name="sub_menu"> <notempty name="key">
+			<h3>
+				<i class="icon icon-unfold"></i>{$key}
+			</h3>
+			</notempty> <if condition="($key eq '开发者')">
+			<ul class="side-sub-menu">
+				<volist name="sub_menu" id="menu">
+				<li><a class="item" href="{:REMOTE_BASE_URL}{$menu.url}"
+					target="_blank">{$menu.title}</a></li>
+				</volist>
+			</ul>
+			<else />
+			<ul class="side-sub-menu">
+				<volist name="sub_menu" id="menu">
+				<li><a class="item" href="{$menu.url|U}">{$menu.title}</a></li>
+				</volist>
+			</ul>
+			</if> </notempty> <!-- /子导航 --> </volist>
+		</div>
+		</block>
+		<!-- /子导航 -->
+	</div>
+	<!-- /边栏 -->
 
-    <!-- 内容区 -->
-    <div id="main-content">
-        <div id="top-alert" class="fixed alert alert-error" style="display: none;">
-            <button class="close fixed" style="margin-top: 4px;">&times;</button>
-            <div class="alert-content">这是内容</div>
-        </div>
-        <div id="main" class="main" style="padding:0">
-            <block name="nav">
-            
-            <!-- nav -->
-            </block>
+	<!-- 内容区 -->
+	<div id="main-content">
+		<div id="top-alert" class="fixed alert alert-error"
+			style="display: none;">
+			<button class="close fixed" style="margin-top: 4px;">&times;</button>
+			<div class="alert-content">这是内容</div>
+		</div>
+		<div id="main" class="main" style="padding: 0">
+			<block name="nav"> <!-- nav --> </block>
 
-            <block name="body"> </block>
-        </div>
-        
-    </div>
-    <!-- /内容区 -->
-    <script type="text/javascript">
+			<block name="body"> </block>
+		</div>
+
+	</div>
+	<!-- /内容区 -->
+	<script type="text/javascript">
     (function(){
         var ThinkPHP = window.Think = {
             "ROOT"   : "__ROOT__", //当前网站地址
@@ -115,9 +117,10 @@
         }
     })();
     </script>
-    <script type="text/javascript" src="__STATIC__/think.js?v={:SITE_VERSION}"></script>
-    <script type="text/javascript" src="__JS__/common.js?v={:SITE_VERSION}"></script>
-    <script type="text/javascript">
+	<script type="text/javascript"
+		src="__STATIC__/think.js?v={:SITE_VERSION}"></script>
+	<script type="text/javascript" src="__JS__/common.js?v={:SITE_VERSION}"></script>
+	<script type="text/javascript">
         +function(){
             var $window = $(window), $subnav = $("#subnav"), url;
             $window.resize(function(){
@@ -187,6 +190,6 @@
             }
         }();
     </script>
-    <block name="script"></block>
+	<block name="script"></block>
 </body>
 </html>

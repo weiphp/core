@@ -1,6 +1,5 @@
 <?php
-include_once("WxPayHelper.php");
-
+include_once ("WxPayHelper.php");
 
 // gen app package
 $commonUtil = new CommonUtil();
@@ -17,22 +16,15 @@ $wxPayHelper->setParameter("input_charset", "GBK");
 
 $curlPost = $wxPayHelper->create_app_package("test");
 
-
-//get prepay id
-$ch2 = curl_init();//初始化curl
-curl_setopt($ch2,CURLOPT_URL,'https://api.weixin.qq.com/pay/genprepay?access_token='.get_access_token_by_apppid(APPID, APPSERCERT));
-curl_setopt($ch2, CURLOPT_HEADER, 0);//设置header
-curl_setopt($ch2, CURLOPT_RETURNTRANSFER, 1);//要求结果为字符串且输出到屏幕上
-curl_setopt($ch2, CURLOPT_POST, 1);//post提交方式
+// get prepay id
+$ch2 = curl_init(); // 初始化curl
+curl_setopt($ch2, CURLOPT_URL, 'https://api.weixin.qq.com/pay/genprepay?access_token=' . get_access_token_by_apppid(APPID, APPSERCERT));
+curl_setopt($ch2, CURLOPT_HEADER, 0); // 设置header
+curl_setopt($ch2, CURLOPT_RETURNTRANSFER, 1); // 要求结果为字符串且输出到屏幕上
+curl_setopt($ch2, CURLOPT_POST, 1); // post提交方式
 curl_setopt($ch2, CURLOPT_POSTFIELDS, $curlPost);
-$data2 = curl_exec($ch2);//运行curl
+$data2 = curl_exec($ch2); // 运行curl
 curl_close($ch2);
-//$jsondata2 = json_decode($data2);
-
-
+// $jsondata2 = json_decode($data2);
 
 echo $data2;
-
-
-
-?>

@@ -2,34 +2,39 @@
 <!--reply panel-->
 <include file="../Public/header" />
 <div id="content" class="content">
-    <div id="reply-weiba" data-title="回复帖子" data-selected="true" data-footer="none" data-rememberScroll="true">
-    <header>
-        <div id="header-buttons">
-            <div class="header-menu-link" id="hmp-cancel">
-                <a class="ts-listen" data-listen="weibo-goback-true">取消</a>
-            </div>
-            <div class="header-menu-link" id="hmp-send">
-                <a id="ts-reply-submit" class="sendBtn disable fc4">发送</a>
-            </div>
-        </div>
-        <h1 style="text-align:center;">
-            回复帖子
-        </h1>
-    </header>
-    <div class="pure-form send_box">
-        <textarea name="reply-content" id="reply-textarea" class="ts-textarea ts-listen" rows="4" placeholder="说点什么呢......" data-listen="weibo-checknums-true" tabindex="0"><php>echo $reply?'回复@'.getUserName($reply['uid']).' ：':'';</php></textarea>
-        <div model-node="numsLeft" class="num">{$initNums}</div>
-        <div class="ckb">
-            <label id="toShare"><input type="checkbox" class="checkbox" id="ifShareFeed_reply" name="ifShareFeed" value="1">{:L('PUBLIC_SHARETO_STREAM')}</label>
-        </div>
-    </div>
-    <div class="ts-footer">
-        <a class="icon facelistbutton ts-listen" data-listen="weibo-facelist-show"><i class="fa-btn fa-btn-smile"></i></a>
-        <a class="icon imgbutton ts-listen" data-listen="weibo-upload-img" data-for="ts-upload-img-box" id="new-weibo-upload"><i class="fa-btn fa-btn-picture"></i></a>
-    </div>
-    <div id="ts-upload-img-box"></div>
-</div>
-    <script type="text/javascript">
+	<div id="reply-weiba" data-title="回复帖子" data-selected="true"
+		data-footer="none" data-rememberScroll="true">
+		<header>
+			<div id="header-buttons">
+				<div class="header-menu-link" id="hmp-cancel">
+					<a class="ts-listen" data-listen="weibo-goback-true">取消</a>
+				</div>
+				<div class="header-menu-link" id="hmp-send">
+					<a id="ts-reply-submit" class="sendBtn disable fc4">发送</a>
+				</div>
+			</div>
+			<h1 style="text-align: center;">回复帖子</h1>
+		</header>
+		<div class="pure-form send_box">
+			<textarea name="reply-content" id="reply-textarea"
+				class="ts-textarea ts-listen" rows="4" placeholder="说点什么呢......"
+				data-listen="weibo-checknums-true" tabindex="0"><php>echo $reply?'回复@'.getUserName($reply['uid']).' ：':'';</php></textarea>
+			<div model-node="numsLeft" class="num">{$initNums}</div>
+			<div class="ckb">
+				<label id="toShare"><input type="checkbox" class="checkbox"
+					id="ifShareFeed_reply" name="ifShareFeed" value="1">{:L('PUBLIC_SHARETO_STREAM')}</label>
+			</div>
+		</div>
+		<div class="ts-footer">
+			<a class="icon facelistbutton ts-listen"
+				data-listen="weibo-facelist-show"><i class="fa-btn fa-btn-smile"></i></a>
+			<a class="icon imgbutton ts-listen" data-listen="weibo-upload-img"
+				data-for="ts-upload-img-box" id="new-weibo-upload"><i
+				class="fa-btn fa-btn-picture"></i></a>
+		</div>
+		<div id="ts-upload-img-box"></div>
+	</div>
+	<script type="text/javascript">
         $(function(){
             TS.app.weibo.listen.checknums(true, $('#reply-textarea'), '', true);
             var url = "{:U('widget/WeibaReply/addReply')}";
@@ -71,4 +76,4 @@
             });
         })
     </script>
-<include file="../Public/footer" />
+	<include file="../Public/footer" />

@@ -2,38 +2,45 @@
 <block name="body">
 <div class="span9 page_message">
 	<section id="contents">
-      <div class="setting_step app_setting content_step" style="margin:20px">
-         <a class="step step_cur_1" href="{:addons_url('WeiSite://Template/index',array('mdm'=>I('mdm')))}">1.选择模板</a>
-       	 <a class="step " href="{:addons_url('WeiSite://Slideshow/lists',array('mdm'=>I('mdm')))}">2.幻灯片配置</a>
-         <a class="step " href="{:addons_url('WeiSite://Category/lists',array('mdm'=>I('mdm')))}">3.栏目配置</a> 
-         <a class="step " href="{:addons_url('WeiSite://WeiSite/preview',array('mdm'=>I('mdm')))}">4.效果预览</a>
-  </div>
-      <div class="tab-content" id="hasSubNav"> 
-        	<div class="sub_tab_content">
-            <form>
-            	<ul class="template_select">
-                    <volist name="tempList" id="vo">
-                    <li class="template_item {$vo.class}">
-                    	<if condition = "!empty($vo[desc])">
-                    	<div class="use_tips">{$vo.desc}</div>
-                        </if>
-                    	<div class="phone">
-                        	<img src="{$vo.icon}" />
-                        </div>
-                        <p><input type="radio" {$vo.checked} name="template" id="template_{$vo.dirName}" value="{$vo.dirName}"/>
-                        <label for="template_{$vo.dirName}">{$vo.title}</label></p>
-                    </li>
-                    </volist>
-                </ul>
-              </form>
-            </div>
-      </div>
-    </section>
- </div>
+		<div class="setting_step app_setting content_step"
+			style="margin: 20px">
+			<a class="step step_cur_1"
+				href="{:addons_url('WeiSite://Template/index',array('mdm'=>I('mdm')))}">1.选择模板</a>
+			<a class="step "
+				href="{:addons_url('WeiSite://Slideshow/lists',array('mdm'=>I('mdm')))}">2.幻灯片配置</a>
+			<a class="step "
+				href="{:addons_url('WeiSite://Category/lists',array('mdm'=>I('mdm')))}">3.栏目配置</a>
+			<a class="step "
+				href="{:addons_url('WeiSite://WeiSite/preview',array('mdm'=>I('mdm')))}">4.效果预览</a>
+		</div>
+		<div class="tab-content" id="hasSubNav">
+			<div class="sub_tab_content">
+				<form>
+					<ul class="template_select">
+						<volist name="tempList" id="vo">
+						<li class="template_item {$vo.class}"><if
+								condition="!empty($vo[desc])">
+							<div class="use_tips">{$vo.desc}</div>
+							</if>
+							<div class="phone">
+								<img src="{$vo.icon}" />
+							</div>
+							<p>
+								<input type="radio" {$vo.checked} name="template"
+									id="template_{$vo.dirName}" value="{$vo.dirName}" /> <label
+									for="template_{$vo.dirName}">{$vo.title}</label>
+							</p></li>
+						</volist>
+					</ul>
+				</form>
+			</div>
+		</div>
+	</section>
+</div>
 </block>
 
-<block name="script">
-<script type="text/javascript" charset="utf-8">
+<block name="script"> <script type="text/javascript"
+	charset="utf-8">
 	$(function(){
 		//选择模板并且ajax提交
 		//选择Ajax提交		
@@ -63,5 +70,4 @@
 			$(this).find('.use_tips').stop().fadeOut();
 			$(this).removeClass('hover');
 			})
-</script>
-</block>
+</script> </block>
