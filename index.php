@@ -56,7 +56,7 @@ define('REMOTE_BASE_URL', 'http://www.weiphp.cn');
 define('SITE_PATH', __DIR__);
 /**
  * 应用目录设置
- * 安全期间，建议安装调试完成后移动到非WEB目录
+ * 安全起见，建议安装调试完成后移动到非WEB目录
  */
 define('APP_PATH', './src/Application/');
 
